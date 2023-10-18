@@ -1,0 +1,8 @@
+{
+    "dockerFile": "Dockerfile",
+    "extensions": [
+      // "golang.Go"
+    ],
+    "forwardPorts": [
+    ]
+  }
