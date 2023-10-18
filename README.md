@@ -34,7 +34,7 @@ Maybe I should not tell you that, but I will literally explain you how to fire y
 The ebooks are DRM free, of course :)
 
 
-## Stay Updated
+## Newsletter
 
 Want to stay updated? [Subscribe to my weekly newsletter](https://kerkour.com/subscribe) where I will share updates about the book and how to (ab)use technology for fun & profit: Programming, Hacking & Entrepreneurship.
 
