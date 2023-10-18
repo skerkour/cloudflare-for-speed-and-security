@@ -34,6 +34,13 @@ Maybe I should not tell you that, but I will literally explain you how to fire y
 The ebooks are DRM free, of course :)
 
 
+## Stay Updated
+
+Want to stay updated? [Subscribe to my weekly newsletter](https://kerkour.com/subscribe) where I will share updates about the book and how to (ab)use technology for fun & profit: Programming, Hacking & Entrepreneurship.
+
+I hate spam even more than you do. I'll never share your email, and you can unsubscribe at any time.
+
+
 ## Early Access
 
 Between writing, editing and technical review, it can take some time to complete a book. This is why I release my books before they are completed. First, so that you can start learning today, but also, so I can get feedback and refine the content of the book with your feedback.
