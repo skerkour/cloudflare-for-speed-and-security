@@ -27,6 +27,7 @@ app.use('*', async (c, next) => {
   const planetscaleConnection = connect({
     url: c.env.DATABASE_URL,
     fetch: (url, init) => {
+      // this is required by Cloudflare Workers runtime
       delete (init!)["cache"];
       return fetch(url, init);
     }
