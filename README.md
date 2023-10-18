@@ -54,7 +54,7 @@ Finally, the price is likely to increase once the book is out of Early Access, s
   <a href="https://kerkour.com/checkout?products=065krb22fdypb6ezrra2e13wzc" class="kerkour-buy-button">Buy Now!</a>
 </h3>
 
-> If you already purchased Black Hat Rust, please let me knoe and I will gladly give your another book.
+> If have you already purchased Black Hat Rust, please let me know and I will gladly give your another book for free.
 
 ## Who this book is for
 
