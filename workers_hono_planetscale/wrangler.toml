@@ -1,0 +1,7 @@
+name = "workers_hono_planetscale"
+main = "src/index.ts"
+compatibility_date = "2023-09-18"
+node_compat = true
+
+[placement]
+mode = "smart"
