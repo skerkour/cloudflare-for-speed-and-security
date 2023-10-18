@@ -141,7 +141,10 @@ But I repeat, this book is NOT a computer science book.
 
 ### 6 - Automate everything with Workers AI
 
-
+- How Large Language Models (LLMs) work
+- How to specialize your AI agent
+- Embeddings vs fine-tuning
+- What is a vector database and when do you need one
 
 ### 7 - Distribute videos for a global audience with Stream
 
