@@ -9,7 +9,7 @@ type Variables = {
   db: Connection;
 };
 
-// CREATE TABLE products(id VARCHAR(6) PRIMARY KEY, serial_number TEXT NOT NULL, name TEXT NOT NULL);
+// CREATE TABLE products (id VARCHAR(6) PRIMARY KEY, serial_number TEXT NOT NULL, name TEXT NOT NULL);
 type Product = {
   id: string;
   serial_number: string;
