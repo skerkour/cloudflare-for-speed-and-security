@@ -45,3 +45,5 @@ node_modules/
 
 
 .wrangler
+target/
+build/

@@ -1,0 +1,52 @@
+FROM alpine:3.18
+
+ENV TZ="Europe/London"
+ENV LC_ALL="en_US.UTF-8"
+ENV LANG="en_US.UTF-8"
+ENV LANGUAGE="en_US:en"
+
+# appuser
+ENV USER=dev
+ENV UID=10001
+
+# openssl, pkgconfig are required for rust
+# libstdc++ is required for vs-code agent
+# openssh-client-defaultis required for git
+RUN apk update && \
+    apk upgrade --no-cache && \
+    apk add --no-cache mailcap tzdata git make vim postgresql15-client bash gcc g++ curl wget zip coreutils \
+        libstdc++ openssh-client-default pkgconfig openssl openssl-dev libc6-compat musl-dev && \
+    update-ca-certificates && \
+    echo "${TZ}" > /etc/timezone
+
+ENV USER=dev
+ENV UID=10001
+
+RUN adduser \
+    --disabled-password \
+    --gecos "" \
+    --home "/home/${USER}" \
+    --shell "/bin/bash" \
+    # --no-create-home \
+    --uid "${UID}" \
+    "${USER}"
+
+RUN apk add --no-cache nodejs npm
+RUN npm config set ignore-scripts true
+
+USER $USER
+
+COPY --chown=$USER bashrc /home/$USER/.bashrc
+COPY --chown=$USER vimrc /home/$USER/.vimrc
+
+RUN mkdir -p /home/$USER/.local/bin \
+    /home/$USER/.local/gopath
+# ENV GOROOT /home/$USER/.local/go
+ENV GOPATH /home/$USER/.local/gopath
+ENV GOPROXY direct
+
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y
+
+ENV PATH $PATH:/home/$USER/.local/bin:$GOROOT/bin:$GOPATH/bin:/home/$USER/.cargo/bin
+
+WORKDIR /

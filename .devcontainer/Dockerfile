@@ -1,47 +1,44 @@
-FROM alpine:3.18
+FROM debian:bookworm
 
 ENV TZ="Europe/London"
-ENV LC_ALL="en_US.UTF-8"
 ENV LANG="en_US.UTF-8"
 ENV LANGUAGE="en_US:en"
 
-# appuser
-ENV USER=dev
-ENV UID=10001
+ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apk update && \
-    apk upgrade --no-cache && \
-    apk add --no-cache mailcap tzdata git make vim postgresql15-client bash gcc g++ curl wget zip coreutils \
-        libstdc++ openssh-client-default && \
-    update-ca-certificates && \
-    echo "${TZ}" > /etc/timezone
+RUN apt update && apt upgrade -y
+RUN apt install -y git ca-certificates make vim postgresql-client \
+    bash gcc g++ curl wget zip coreutils locales mailcap pkg-config openssl gnupg libssl-dev
 
-ENV USER=dev
-ENV UID=10001
+# Set the locale
+RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && \
+    locale-gen
+ENV LC_ALL="en_US.UTF-8"
 
-RUN adduser \
-    --disabled-password \
-    --gecos "" \
-    --home "/home/${USER}" \
-    --shell "/bin/bash" \
-    # --no-create-home \
-    --uid "${UID}" \
-    "${USER}"
+RUN update-ca-certificates
 
-RUN apk add --no-cache nodejs npm
-RUN npm config set ignore-scripts true
+# setup node
+# https://github.com/nodesource/distributions
+RUN mkdir -p /etc/apt/keyrings
+RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+env NODE_MAJOR=20
+RUN echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
+RUN apt update && apt install -y nodejs
+RUN npm install -g npm@latest
 
-USER $USER
+# Setup dev user
+ARG USERNAME=dev
+ARG USER_UID=10001
+ARG USER_GID=$USER_UID
 
-COPY bashrc /home/$USER/.bashrc
-COPY vimrc /home/$USER/.vimrc
+RUN addgroup --gid $USER_GID $USERNAME \
+    && adduser --uid $USER_UID --ingroup $USERNAME --disabled-password --shell /bin/bash --gecos "" $USERNAME
 
-RUN mkdir -p /home/$USER/.local/bin \
-    /home/$USER/.local/gopath
-# ENV GOROOT /home/$USER/.local/go
-ENV GOPATH /home/$USER/.local/gopath
-ENV GOPROXY direct
+USER $USERNAME
 
-ENV PATH $PATH:/home/$USER/.local/bin:$GOROOT/bin:$GOPATH/bin
+COPY --chown=$USERNAME bashrc /home/$USERNAME/.bashrc
+COPY --chown=$USERNAME vimrc /home/$USERNAME/.vimrc
+
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y
 
 WORKDIR /
