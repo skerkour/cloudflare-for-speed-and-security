@@ -24,6 +24,7 @@ function randStr(): string {
 }
 
 app.use('*', async (c, next) => {
+  // we use the pool.fetch connection method. See chapter 6 for the "why"
   neonConfig.poolQueryViaFetch = true;
   neonConfig.fetchConnectionCache = true;
 
