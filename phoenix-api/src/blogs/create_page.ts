@@ -4,7 +4,7 @@ import * as api from "./api";
 import { checkAuth } from "../users/utils";
 import { NotFoundError, PermissionDeniedError } from "../errors";
 import { Blog, Page } from "./entities";
-import { uuidv7 } from "@phoenix/uuiv7/src";
+import { uuidv7 } from "@phoenix/uuiv7";
 
 export async function createPage(ctx: Context<{Bindings: Bindings, Variables: Variables}>): Promise<Response> {
   const userId = await checkAuth(ctx);

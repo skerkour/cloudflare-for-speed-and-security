@@ -2,8 +2,7 @@ import { Bindings, Variables } from "../bindings";
 import { Context } from "hono";
 import { getCookie } from "hono/cookie";
 import { PermissionDeniedError } from "../errors";
-import jwt from "@phoenix/jwt/src/index";
-
+import jwt from "@phoenix/jwt";
 
 export async function hashPassword(password: string, userId: string): Promise<ArrayBuffer> {
   const textEncoder = new TextEncoder();

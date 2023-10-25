@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import { etagMiddleware } from '@phoenix/core/src/middlewares/etag';
+import { etagMiddleware } from '@phoenix/core/middlewares/etag';
 import Handlebars from './templates';
 
 type Bindings = {

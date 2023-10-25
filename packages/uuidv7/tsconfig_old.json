@@ -1,0 +1,16 @@
+{
+    "include": ["src"],
+	"compilerOptions": {
+	  "target": "es2022",
+	  "moduleResolution": "node",
+	  "allowJs": false,
+	  "noEmit": false,
+	  "strict": true,
+	  "esModuleInterop": true,
+	  "declaration": true,
+	  "declarationDir": "dist",
+	  "outDir": "dist",
+	  "skipLibCheck": true,
+	  "types": ["@cloudflare/workers-types"]
+	}
+  }

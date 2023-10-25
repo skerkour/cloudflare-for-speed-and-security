@@ -2,7 +2,7 @@ import { Context } from "hono";
 import { setCookie } from "hono/cookie";
 import { Bindings, Variables } from "../bindings";
 import * as api from "./api";
-import jwt from "@phoenix/jwt/src/index";
+import jwt from "@phoenix/jwt";
 import { User } from "./entities";
 import { NotFoundError, PermissionDeniedError } from "../errors";
 import { decodePasswordhash, hashPassword } from "./utils";

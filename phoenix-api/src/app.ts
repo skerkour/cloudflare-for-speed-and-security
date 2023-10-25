@@ -1,8 +1,8 @@
 import { Hono } from 'hono';
 import { Pool, neonConfig } from '@neondatabase/serverless';
 import { ErrorCode, NotFoundError, PermissionDeniedError, formatZodError } from './errors';
-import { ApiError, ApiResponse } from '@phoenix/core/src/api';
-import { requestIdMiddleware } from '@phoenix/core/src/middlewares/request_id';
+import { ApiError, ApiResponse } from '@phoenix/core/api';
+import { requestIdMiddleware } from '@phoenix/core/middlewares';
 import { Bindings, Variables } from './bindings';
 import { ZodError } from 'zod';
 import { createPage } from './blogs/create_page';

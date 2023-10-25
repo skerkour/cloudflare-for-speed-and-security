@@ -2,7 +2,7 @@ import { Context } from "hono";
 import { Bindings, Variables } from "../bindings";
 import * as api from "./api";
 import { encodePasswordHash, hashPassword } from "./utils";
-import { uuidv7 } from "@phoenix/uuiv7/src";
+import { uuidv7 } from "@phoenix/uuiv7";
 import { User } from "./entities";
 
 export async function signup(ctx: Context<{Bindings: Bindings, Variables: Variables}>): Promise<Response> {

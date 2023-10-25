@@ -13,9 +13,9 @@
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.6.0",
-    "@phoenix/core": "^0.1.0",
-    "@phoenix/jwt": "file:../packages/jwt",
-    "@phoenix/uuiv7": "^0.1.0",
+    "@phoenix/core": "*",
+    "@phoenix/jwt": "*",
+    "@phoenix/uuiv7": "*",
     "hono": "^3.8.3",
     "zod": "^3.22.4"
   }

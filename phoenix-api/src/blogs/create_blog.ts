@@ -2,7 +2,7 @@ import { Context } from "hono";
 import { Bindings, Variables } from "../bindings";
 import * as api from "./api";
 import { Blog } from "./entities";
-import { uuidv7 } from "@phoenix/uuiv7/src";
+import { uuidv7 } from "@phoenix/uuiv7";
 import { checkAuth } from "../users/utils";
 
 export async function createBlog(ctx: Context<{Bindings: Bindings, Variables: Variables}>): Promise<Response> {

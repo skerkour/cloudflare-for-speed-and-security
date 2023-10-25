@@ -1,4 +1,14 @@
 import { MiddlewareHandler } from "hono";
+import { uuidv7 } from "@phoenix/uuiv7";
+
+export function requestIdMiddleware(): MiddlewareHandler {
+  return async (ctx, next) => {
+    const requestId = uuidv7();
+    ctx.set('request_id', requestId);
+    ctx.res.headers.set('X-Phoenix-Request-Id', requestId);
+    await next();
+  };
+}
 
 export function etagMiddleware(): MiddlewareHandler {
   return async (ctx, next) => {
