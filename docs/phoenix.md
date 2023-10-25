@@ -23,10 +23,16 @@ $ make deploy
 
 In your Cloudflare dashboard, go to `Workers & Pages` > `pingoo-api` > `Settings` > `Variables`.
 
-Create a new Environment Variable:
+Create the following Environment Variable:
 ```
 Variable name: DATABASE_URL
 Value: postgres://[YOUR_NEON_DATABASE_URL]
+Encrypt: true
+```
+
+```
+Variable name: JWT_SECRET
+Value: [See phoenix-api/env.example to learn how to generate a secure secret key]
 Encrypt: true
 ```
 
