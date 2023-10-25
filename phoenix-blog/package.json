@@ -1,0 +1,21 @@
+{
+    "name": "phoenix-blog",
+    "author": "https://kerkour.com",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "templates": "npx handlebars src/templates/*.handlebars -f src/templates/precompiled.js -c handlebars/runtime -m",
+        "deploy": "wrangler deploy",
+        "dev": "wrangler dev"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/skerkour/cloudflare-for-speed-and-security.git"
+    },
+    "dependencies": {
+        "@phoenix/core": "file:../packages/core",
+        "@phoenix/uuiv7": "file:../packages/uuidv7",
+        "handlebars": "^4.7.8",
+        "hono": "^3.8.3"
+    }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "phoenix-api",
+  "author": "https://kerkour.com",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/skerkour/cloudflare-for-speed-and-security.git"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^0.6.0",
+    "@phoenix/core": "^0.1.0",
+    "@phoenix/jwt": "file:../packages/jwt",
+    "@phoenix/uuiv7": "^0.1.0",
+    "hono": "^3.8.3",
+    "zod": "^3.22.4"
+  }
+}

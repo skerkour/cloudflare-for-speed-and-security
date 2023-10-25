@@ -1,0 +1,23 @@
+{
+    "name": "phoenix",
+    "author": "https://kerkour.com",
+    "version": "0.1.0",
+    "private": true,
+    "description": "Serverless blogging engine",
+    "workspaces": [
+        "phoenix-*",
+        "packages/*"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/skerkour/cloudflare-for-speed-and-security.git"
+    },
+    "devDependencies": {
+        "@cloudflare/workers-types": "^4.20231016.0",
+        "typescript": "^5.2.2",
+        "wrangler": "^3.14.0"
+    },
+    "dependencies": {
+        "hono": "^3.8.3"
+    }
+}

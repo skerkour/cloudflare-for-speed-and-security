@@ -1,0 +1,10 @@
+{
+	"name": "cloudflarebook_workers_rust",
+	"author": "https://kerkour.com",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev"
+	}
+}

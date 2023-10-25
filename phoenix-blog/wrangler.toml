@@ -1,0 +1,11 @@
+name = "phoenix-blog"
+main = "src/index.ts"
+compatibility_date = "2023-09-18"
+
+services = [
+  { binding = "api", service = "phoenix-api" }
+]
+
+[[r2_buckets]]
+binding = "phoenix_storage"
+bucket_name = "phoenix"

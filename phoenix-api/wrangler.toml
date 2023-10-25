@@ -1,0 +1,6 @@
+name = "phoenix-api"
+main = "src/app.ts"
+compatibility_date = "2023-09-18"
+
+[placement]
+mode = "smart"

@@ -1,0 +1,25 @@
+name: deploy
+
+# You need to setup the following secrets:
+# CLOUDFLARE_ACCOUNT_ID: Your Cloudflare account ID
+# CLOUDFLARE_API_TOKEN: Your API Token generated
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+
+  phoenix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Dependencies
+        run: |
+          make install_ci
+
+      - name: Deploy
+        run: |
+          make deploy

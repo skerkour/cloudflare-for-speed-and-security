@@ -47,3 +47,6 @@ node_modules/
 .wrangler
 target/
 build/
+
+# this like .env.dev files for Cloudflare workers
+.dev.vars
