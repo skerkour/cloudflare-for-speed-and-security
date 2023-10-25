@@ -11,6 +11,8 @@ You need 2 domains, let's say `phoenix.com` and `phoenix.blog` already setup on 
 
 Create an account and a database at https://neon.tech
 
+Import the database schema from `phoenix-api/migrations/0000.up.sql` into the database (`psql` is enough, or from Neon's dashboard).
+
 Make sure that you have Node.js installed (see `.devcontainer/Dockerfile` for and example of setup).
 
 Then, in the root folder of this repository, run:
