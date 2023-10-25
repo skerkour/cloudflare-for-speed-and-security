@@ -1,9 +1,12 @@
 import { Bindings, Variables } from "../bindings";
 import { Context } from "hono";
 import { getCookie } from "hono/cookie";
-import { PermissionDeniedError } from "../errors";
+import { NotFoundError, PermissionDeniedError } from "../errors";
 import jwt from "@phoenix/jwt";
+import { Pool } from "@neondatabase/serverless";
+import { User } from "./entities";
 
+// Hash the given password with PBKDF2-SHA-512 using userId as a salt
 export async function hashPassword(password: string, userId: string): Promise<ArrayBuffer> {
   const textEncoder = new TextEncoder();
 
@@ -50,7 +53,7 @@ export async function checkAuth(ctx: Context<{Bindings: Bindings, Variables: Var
   try {
     const isAuthCookieValid = await jwt.verify(authCookie, ctx.env.JWT_SECRET);
     if (!isAuthCookieValid) {
-      throw new PermissionDeniedError('');
+      throw new PermissionDeniedError();
     }
   } catch (err) {
     throw new PermissionDeniedError('session is not valid. Please clear your cookies and reload the page.');
@@ -59,4 +62,13 @@ export async function checkAuth(ctx: Context<{Bindings: Bindings, Variables: Var
     // Decode token
     const { payload } = jwt.decode(authCookie)
     return payload.user_id as string;
+}
+
+export async function findUserById(db: Pool, userId: string): Promise<User> {
+  const usersRes = await db.query('SELECT * FROM users WHERE id = $1', [userId]);
+  if (usersRes.rowCount !== 1) {
+    throw new NotFoundError('user not found');
+  }
+  const user: User = usersRes.rows[0];
+  return user;
 }

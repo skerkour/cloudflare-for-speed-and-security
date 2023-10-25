@@ -3,10 +3,15 @@ import { Bindings, Variables } from "../bindings";
 import * as api from "./api";
 import { Blog } from "./entities";
 import { uuidv7 } from "@phoenix/uuiv7";
-import { checkAuth } from "../users/utils";
+import { checkAuth, findUserById } from "../users/utils";
+import { PermissionDeniedError } from "../errors";
 
 export async function createBlog(ctx: Context<{Bindings: Bindings, Variables: Variables}>): Promise<Response> {
   const userId = await checkAuth(ctx);
+  const user = await findUserById(ctx.var.db, userId);
+  if (!user.is_admin) {
+    throw new PermissionDeniedError();
+  }
 
   const reqBody = await ctx.req.json();
   const apiInput = api.CreateBlogInput.parse(reqBody);
@@ -20,11 +25,10 @@ export async function createBlog(ctx: Context<{Bindings: Bindings, Variables: Va
     slug: apiInput.slug,
     navigation: {},
     description: '',
-    user_id: userId,
   };
 
-  await ctx.var.db.query('INSERT INTO blogs VALUES($1, $2, $3, $4, $5, $6, $7, $8)',
-    [blog.id, blog.created_at, blog.updated_at, blog.name, blog.slug, blog.navigation, blog.description, blog.user_id],
+  await ctx.var.db.query('INSERT INTO blogs VALUES($1, $2, $3, $4, $5, $6, $7)',
+    [blog.id, blog.created_at, blog.updated_at, blog.name, blog.slug, blog.navigation, blog.description],
   );
 
   return ctx.json(blog);

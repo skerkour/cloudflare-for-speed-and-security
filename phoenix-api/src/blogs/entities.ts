@@ -12,8 +12,6 @@ export type Blog = {
   slug: string;
   navigation: Record<string, string>,
   description: string,
-
-  user_id: string;
 };
 
 export type Page = {

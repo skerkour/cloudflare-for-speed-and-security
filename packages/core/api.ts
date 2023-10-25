@@ -7,7 +7,3 @@ export type ApiError = {
   message: string;
   code: string;
 };
-
-export type Page = {
-
-}

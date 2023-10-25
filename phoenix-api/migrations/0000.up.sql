@@ -18,9 +18,7 @@ CREATE TABLE blogs (
     name TEXT NOT NULL,
     slug TEXT NOT NULL UNIQUE,
     navigation JSONB NOT NULL,
-    description TEXT NOT NULL,
-
-    user_id UUID NOT NULL REFERENCES users(id)
+    description TEXT NOT NULL
 );
 CREATE INDEX index_blogs_on_user_id ON blogs (user_id);
 

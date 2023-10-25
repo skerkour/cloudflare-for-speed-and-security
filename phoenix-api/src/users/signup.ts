@@ -4,10 +4,27 @@ import * as api from "./api";
 import { encodePasswordHash, hashPassword } from "./utils";
 import { uuidv7 } from "@phoenix/uuiv7";
 import { User } from "./entities";
+import { InternalServerError, PermissionDeniedError } from "../errors";
 
 export async function signup(ctx: Context<{Bindings: Bindings, Variables: Variables}>): Promise<Response> {
   const reqBody = await ctx.req.json()
   const apiInput = api.SignupInput.parse(reqBody);
+
+  let isAdmin = false;
+  const usersCountRes = await ctx.var.db.query('SELECT COUNT(*) as users_count FROM users');
+  if (usersCountRes.rowCount !== 1) {
+    throw new InternalServerError();
+  }
+  const usersCount = usersCountRes.rows[0].users_count as number | undefined;
+  if (!usersCount) {
+    throw new InternalServerError();
+  }
+
+  if (usersCount === 0) {
+    isAdmin = true;
+  } else if (usersCount >= 2) {
+    throw new PermissionDeniedError();
+  }
 
   const newUserId = uuidv7();
   const passwordHashBuffer = await hashPassword(apiInput.password, newUserId);
@@ -20,7 +37,7 @@ export async function signup(ctx: Context<{Bindings: Bindings, Variables: Variab
     updated_at: now,
     email: apiInput.email,
     password_hash: passwordHash,
-    is_admin: false,
+    is_admin: isAdmin,
   };
 
   await ctx.var.db.query('INSERT INTO users VALUES ($1, $2, $3, $4, $5, $6)',
