@@ -5,7 +5,7 @@ import * as api from "./api";
 import jwt from "@phoenix/jwt";
 import { User } from "./entities";
 import { NotFoundError, PermissionDeniedError } from "../errors";
-import { decodePasswordhash, hashPassword } from "./utils";
+import { base64ToBuffer, hashPassword } from "../utils";
 
 export async function login(ctx: Context<{Bindings: Bindings, Variables: Variables}>): Promise<Response> {
   const reqBody = await ctx.req.json()
@@ -18,7 +18,7 @@ export async function login(ctx: Context<{Bindings: Bindings, Variables: Variabl
   const user: User = usersRes.rows[0];
 
   const inputPasswordHash = await hashPassword(apiInput.password, user.id);
-  const userPasswordHash = decodePasswordhash(user.password_hash);
+  const userPasswordHash = base64ToBuffer(user.password_hash);
 
   if (!crypto.subtle.timingSafeEqual(userPasswordHash, inputPasswordHash)) {
     throw new PermissionDeniedError('password is not valid')

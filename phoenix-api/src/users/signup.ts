@@ -1,7 +1,7 @@
 import { Context } from "hono";
 import { Bindings, Variables } from "../bindings";
 import * as api from "./api";
-import { encodePasswordHash, hashPassword } from "./utils";
+import { bufferToBase64, hashPassword } from "../utils";
 import { uuidv7 } from "@phoenix/uuiv7";
 import { User } from "./entities";
 import { InternalServerError, PermissionDeniedError } from "../errors";
@@ -10,6 +10,9 @@ export async function signup(ctx: Context<{Bindings: Bindings, Variables: Variab
   const reqBody = await ctx.req.json()
   const apiInput = api.SignupInput.parse(reqBody);
 
+  // for the demo we only allow 2 accounts to be created
+  // 1. the admin account to manage resources
+  // 2. the readers account with read-only access
   let isAdmin = false;
   const usersCountRes = await ctx.var.db.query('SELECT COUNT(*) as users_count FROM users');
   if (usersCountRes.rowCount !== 1) {
@@ -28,7 +31,7 @@ export async function signup(ctx: Context<{Bindings: Bindings, Variables: Variab
 
   const newUserId = uuidv7();
   const passwordHashBuffer = await hashPassword(apiInput.password, newUserId);
-  const passwordHash = encodePasswordHash(passwordHashBuffer);
+  const passwordHash = bufferToBase64(passwordHashBuffer);
 
   const now = new Date();
   const user: User = {

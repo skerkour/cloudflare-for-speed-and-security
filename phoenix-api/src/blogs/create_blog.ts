@@ -3,15 +3,12 @@ import { Bindings, Variables } from "../bindings";
 import * as api from "./api";
 import { Blog } from "./entities";
 import { uuidv7 } from "@phoenix/uuiv7";
-import { checkAuth, findUserById } from "../users/utils";
+import { checkAuth, checkIsAdmin } from "../utils";
 import { PermissionDeniedError } from "../errors";
 
 export async function createBlog(ctx: Context<{Bindings: Bindings, Variables: Variables}>): Promise<Response> {
   const userId = await checkAuth(ctx);
-  const user = await findUserById(ctx.var.db, userId);
-  if (!user.is_admin) {
-    throw new PermissionDeniedError();
-  }
+  await checkIsAdmin(ctx.var.db, userId);
 
   const reqBody = await ctx.req.json();
   const apiInput = api.CreateBlogInput.parse(reqBody);

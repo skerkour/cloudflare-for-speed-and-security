@@ -1,10 +1,11 @@
-import { Bindings, Variables } from "../bindings";
+import { Bindings, Variables } from "./bindings";
 import { Context } from "hono";
 import { getCookie } from "hono/cookie";
-import { NotFoundError, PermissionDeniedError } from "../errors";
+import { NotFoundError, PermissionDeniedError } from "./errors";
 import jwt from "@phoenix/jwt";
 import { Pool } from "@neondatabase/serverless";
-import { User } from "./entities";
+import { User } from "./users/entities";
+import * as base64 from '@phoenix/base64'
 
 // Hash the given password with PBKDF2-SHA-512 using userId as a salt
 export async function hashPassword(password: string, userId: string): Promise<ArrayBuffer> {
@@ -35,13 +36,13 @@ export async function hashPassword(password: string, userId: string): Promise<Ar
 }
 
 // encodes an ArrayBuffer to base64
-export function encodePasswordHash(hash: ArrayBuffer): string {
-  return btoa(String.fromCharCode(...new Uint8Array(hash)))
+export function bufferToBase64(hash: ArrayBuffer): string {
+  return base64.fromByteArray(new Uint8Array(hash));
 }
 
 // decodes a base64 string to an ArrayBuffer
-export function decodePasswordhash(hash: string): ArrayBuffer {
-  return Uint8Array.from(atob(hash), c => c.charCodeAt(0));
+export function base64ToBuffer(hash: string): ArrayBuffer {
+  return base64.toByteArray(hash).buffer;
 }
 
 export async function checkAuth(ctx: Context<{Bindings: Bindings, Variables: Variables}>): Promise<string> {
@@ -59,16 +60,19 @@ export async function checkAuth(ctx: Context<{Bindings: Bindings, Variables: Var
     throw new PermissionDeniedError('session is not valid. Please clear your cookies and reload the page.');
   }
 
-    // Decode token
-    const { payload } = jwt.decode(authCookie)
-    return payload.user_id as string;
+  // Decode token
+  const { payload } = jwt.decode(authCookie)
+  return payload.user_id as string;
 }
 
-export async function findUserById(db: Pool, userId: string): Promise<User> {
+// for the demo we only allow Admins to performs create/update/delete actions
+export async function checkIsAdmin(db: Pool, userId: string) {
   const usersRes = await db.query('SELECT * FROM users WHERE id = $1', [userId]);
   if (usersRes.rowCount !== 1) {
     throw new NotFoundError('user not found');
   }
   const user: User = usersRes.rows[0];
-  return user;
+  if (!user.is_admin) {
+    throw new PermissionDeniedError();
+  }
 }
