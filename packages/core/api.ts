@@ -14,7 +14,7 @@ export const SignupInputValidator = z.object({
   password: z.string().min(10),
 }).strict();
 
-export type SignupInput = typeof SignupInputValidator._type;
+export type SignupInput = z.infer<typeof SignupInputValidator>;
 
 
 export const LoginInputValidator = z.object({
@@ -22,7 +22,7 @@ export const LoginInputValidator = z.object({
   password: z.string(),
 }).strict();
 
-export type LoginInput = typeof LoginInputValidator._type;
+export type LoginInput = z.infer<typeof LoginInputValidator>;
 
 
 export type UserApi = Omit<User, 'password_hash'>;
@@ -39,18 +39,24 @@ export function convertUser(input: User): UserApi {
 
 const blogSlug = z.string().min(3).regex(/^[a-z]+$/, 'must be lowercase')
 
-export const CreateBlogInput = z.object({
+export const CreateBlogInputValidator = z.object({
   name: z.string(),
   slug: blogSlug,
 }).strict();
 
-export const UpdateBlogInput = z.object({
+export type CreateBlogInput = z.infer<typeof CreateBlogInputValidator>;
+
+
+export const UpdateBlogInputValidator = z.object({
   blog_id: z.string(),
   slug: blogSlug.optional(),
   name: z.string().optional(),
   description: z.string().optional(),
   navigation: z.record(z.string()).optional(),
 }).strict();
+
+export type UpdateBlogInput = z.infer<typeof UpdateBlogInputValidator>;
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Pages
@@ -66,21 +72,21 @@ export const CreatePageInputValidator = z.object({
   content_html: z.string(),
 }).strict();
 
-export type CreatePageInput = typeof CreatePageInputValidator._type;
+export type CreatePageInput = z.infer<typeof CreatePageInputValidator>;
 
 
 export const GetPageInputValidator = z.object({
   page_id: z.string(),
 }).strict();
 
-export type GetPageInput = typeof GetPageInputValidator._type;
+export type GetPageInput = z.infer<typeof GetPageInputValidator>;
 
 
 export const DeletePageInputValidator = z.object({
   page_id: z.string(),
 }).strict();
 
-export type DeletePageInput = typeof DeletePageInputValidator._type;
+export type DeletePageInput = z.infer<typeof DeletePageInputValidator>;
 
 
 export const UpdatePageInputValidator = z.object({
@@ -90,11 +96,11 @@ export const UpdatePageInputValidator = z.object({
   content_html: z.string().optional(),
 }).strict();
 
-export type UpdatePageInput = typeof UpdatePageInputValidator._type;
+export type UpdatePageInput = z.infer<typeof UpdatePageInputValidator>;
 
 
 export const GetPagesInputValidator = z.object({
   blog_id: z.string(),
 }).strict();
 
-export type GetPagesInput = typeof GetPagesInputValidator._type;
+export type GetPagesInput = z.infer<typeof GetPagesInputValidator>;

@@ -1,6 +1,6 @@
 import { uuidv7 } from "@phoenix/uuiv7";
 import { checkAuth, checkIsAdmin, parseAndValidateApiInput } from "../utils";
-import { CreateBlogInput } from "@phoenix/core/api";
+import { CreateBlogInputValidator } from "@phoenix/core/api";
 import { Blog } from "@phoenix/core/entities";
 import { Context } from "../hono_bindings";
 
@@ -8,7 +8,7 @@ export async function createBlog(ctx: Context): Promise<Response> {
   const userId = await checkAuth(ctx);
   await checkIsAdmin(ctx.var.db, userId);
 
-  const apiInput = await parseAndValidateApiInput(ctx, CreateBlogInput);
+  const apiInput = await parseAndValidateApiInput(ctx, CreateBlogInputValidator);
 
   const now = new Date();
   const blog: Blog = {

@@ -1,14 +1,14 @@
 import { Context } from "../hono_bindings";
 import { checkAuth, checkIsAdmin, parseAndValidateApiInput } from "../utils";
 import { NotFoundError } from "../errors";
-import { UpdateBlogInput } from "@phoenix/core/api";
+import { UpdateBlogInputValidator } from "@phoenix/core/api";
 import { Blog } from "@phoenix/core/entities";
 
 export async function updateBlog(ctx: Context): Promise<Response> {
   const userId = await checkAuth(ctx);
   await checkIsAdmin(ctx.var.db, userId);
 
-  const apiInput = await parseAndValidateApiInput(ctx, UpdateBlogInput);
+  const apiInput = await parseAndValidateApiInput(ctx, UpdateBlogInputValidator);
 
   const blogRes = await ctx.var.db.query('SELECT * FROM blogs WHERE id = $1', [apiInput.blog_id]);
   if (blogRes.rowCount !== 1) {

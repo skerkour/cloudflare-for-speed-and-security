@@ -1,3 +1,3 @@
 'use strict'
 
-module.exports = require('./clone.js')()
+module.exports = require('./deepclone.js')()
