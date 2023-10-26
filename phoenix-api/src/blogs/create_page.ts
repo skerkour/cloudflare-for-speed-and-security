@@ -1,17 +1,16 @@
-import { Context } from "hono";
-import { Bindings, Variables } from "../hono_bindings";
 import { checkAuth, parseAndValidateApiInput } from "../utils";
 import { NotFoundError } from "../errors";
 import { uuidv7 } from "@phoenix/uuiv7";
 import { checkIsAdmin } from "../utils";
-import { CreatePageInput } from "@phoenix/core/api";
+import { CreatePageInputValidator } from "@phoenix/core/api";
 import { Blog, Page } from "@phoenix/core/entities";
+import { Context } from "../hono_bindings";
 
-export async function createPage(ctx: Context<{Bindings: Bindings, Variables: Variables}>): Promise<Response> {
+export async function createPage(ctx: Context): Promise<Response> {
   const userId = await checkAuth(ctx);
   await checkIsAdmin(ctx.var.db, userId);
 
-  const apiInput = await parseAndValidateApiInput(ctx, CreatePageInput);
+  const apiInput = await parseAndValidateApiInput(ctx, CreatePageInputValidator);
 
   const blogRes = await ctx.var.db.query('SELECT * FROM blogs WHERE id = $1', [apiInput.blog_id]);
   if (blogRes.rowCount !== 1) {

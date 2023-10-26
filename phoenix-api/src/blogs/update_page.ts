@@ -1,15 +1,14 @@
-import { Context } from "hono";
-import { Bindings, Variables } from "../hono_bindings";
+import { Context } from "../hono_bindings";
 import { checkAuth, checkIsAdmin, parseAndValidateApiInput } from "../utils";
 import { NotFoundError } from "../errors";
-import { UpdatePageInput } from "@phoenix/core/api";
+import { UpdatePageInputValidator } from "@phoenix/core/api";
 import { Page } from "@phoenix/core/entities";
 
-export async function updatePage(ctx: Context<{Bindings: Bindings, Variables: Variables}>): Promise<Response> {
+export async function updatePage(ctx: Context): Promise<Response> {
   const userId = await checkAuth(ctx);
   await checkIsAdmin(ctx.var.db, userId);
 
-  const apiInput = await parseAndValidateApiInput(ctx, UpdatePageInput);
+  const apiInput = await parseAndValidateApiInput(ctx, UpdatePageInputValidator);
 
   const pageRes = await ctx.var.db.query('SELECT * FROM pages WHERE id = $1', [apiInput.page_id]);
   if (pageRes.rowCount !== 1) {

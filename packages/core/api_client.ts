@@ -1,3 +1,5 @@
+import { GetPageInput, Routes } from "./api";
+import { Page } from "./entities";
 
 const networkErrorMessage = 'Network error';
 
@@ -74,4 +76,9 @@ export class ApiClient {
 
     return apiReponse.data;
   }
+}
+
+export async function getPage(client: ApiClient, input: GetPageInput): Promise<Page> {
+  const page: Page = await client.post(Routes.Page, input);
+  return page;
 }

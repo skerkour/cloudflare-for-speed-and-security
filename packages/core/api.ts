@@ -9,15 +9,21 @@ export * from './api_routes';
 // Users
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const SignupInput = z.object({
+export const SignupInputValidator = z.object({
   email: z.string().email().refine((val) => val.toLowerCase() === val, { message: 'must be lowercase' }),
   password: z.string().min(10),
 }).strict();
 
-export const LoginInput = z.object({
+export type SignupInput = typeof SignupInputValidator._type;
+
+
+export const LoginInputValidator = z.object({
   email: z.string().email(),
   password: z.string(),
 }).strict();
+
+export type LoginInput = typeof LoginInputValidator._type;
+
 
 export type UserApi = Omit<User, 'password_hash'>;
 
@@ -50,31 +56,45 @@ export const UpdateBlogInput = z.object({
 // Pages
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const pageSlug = z.string().min(2).refine((val) => val.startsWith('/'), { message: 'must start with /' })
+const pageSlugValidator = z.string().min(2).refine((val) => val.startsWith('/'), { message: 'must start with /' })
 
-export const CreatePageInput = z.object({
+export const CreatePageInputValidator = z.object({
   title: z.string(),
-  slug: pageSlug,
+  slug: pageSlugValidator,
   type: z.nativeEnum(PageType),
   blog_id: z.string().uuid(),
   content_html: z.string(),
 }).strict();
 
-export const GetPageInput = z.object({
+export type CreatePageInput = typeof CreatePageInputValidator._type;
+
+
+export const GetPageInputValidator = z.object({
   page_id: z.string(),
 }).strict();
 
-export const DeletePageInput = z.object({
+export type GetPageInput = typeof GetPageInputValidator._type;
+
+
+export const DeletePageInputValidator = z.object({
   page_id: z.string(),
 }).strict();
 
-export const UpdatePageInput = z.object({
+export type DeletePageInput = typeof DeletePageInputValidator._type;
+
+
+export const UpdatePageInputValidator = z.object({
   page_id: z.string(),
-  slug: pageSlug.optional(),
+  slug: pageSlugValidator.optional(),
   title: z.string().optional(),
   content_html: z.string().optional(),
 }).strict();
 
-export const GetPagesInput = z.object({
+export type UpdatePageInput = typeof UpdatePageInputValidator._type;
+
+
+export const GetPagesInputValidator = z.object({
   blog_id: z.string(),
 }).strict();
+
+export type GetPagesInput = typeof GetPagesInputValidator._type;

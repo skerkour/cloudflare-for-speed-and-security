@@ -1,13 +1,12 @@
-import { Context } from "hono";
-import { Bindings, Variables } from "../hono_bindings";
 import { bufferToBase64, hashPassword, parseAndValidateApiInput } from "../utils";
 import { uuidv7 } from "@phoenix/uuiv7";
 import { InternalServerError, PermissionDeniedError } from "../errors";
 import { User } from "@phoenix/core/entities";
-import { SignupInput, convertUser } from "@phoenix/core/api";
+import { SignupInputValidator, convertUser } from "@phoenix/core/api";
+import { Context } from "../hono_bindings";
 
-export async function signup(ctx: Context<{Bindings: Bindings, Variables: Variables}>): Promise<Response> {
-  const apiInput = await parseAndValidateApiInput(ctx, SignupInput);
+export async function signup(ctx: Context): Promise<Response> {
+  const apiInput = await parseAndValidateApiInput(ctx, SignupInputValidator);
 
   // for the demo we only allow 2 accounts to be created
   // 1. the admin account to manage resources

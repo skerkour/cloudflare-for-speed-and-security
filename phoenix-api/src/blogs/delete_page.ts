@@ -1,13 +1,12 @@
-import { Context } from "hono";
-import { Bindings, Variables } from "../hono_bindings";
+import { Context } from "../hono_bindings";
 import { checkAuth, checkIsAdmin, parseAndValidateApiInput } from "../utils";
-import { DeletePageInput } from "@phoenix/core/api";
+import { DeletePageInputValidator } from "@phoenix/core/api";
 
-export async function deletePage(ctx: Context<{Bindings: Bindings, Variables: Variables}>): Promise<Response> {
+export async function deletePage(ctx: Context): Promise<Response> {
   const userId = await checkAuth(ctx);
   await checkIsAdmin(ctx.var.db, userId);
 
-  const apiInput = await parseAndValidateApiInput(ctx, DeletePageInput);
+  const apiInput = await parseAndValidateApiInput(ctx, DeletePageInputValidator);
 
   await ctx.var.db.query('DELETE FROM pages WHERE id = $1', [apiInput.page_id]);
 

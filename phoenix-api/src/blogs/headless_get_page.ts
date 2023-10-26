@@ -1,7 +1,6 @@
-import { Context } from "hono";
-import { Bindings, Variables } from "../hono_bindings";
+import { Context } from "../hono_bindings";
 
-export async function headlessGetPage(ctx: Context<{Bindings: Bindings, Variables: Variables}>): Promise<Response> {
+export async function headlessGetPage(ctx: Context): Promise<Response> {
   const pageSlug = ctx.req.query('slug');
   return ctx.json({ title: 'Hello World', content_html: `<h1>Hello World!</h1> from ${pageSlug}` });
 }

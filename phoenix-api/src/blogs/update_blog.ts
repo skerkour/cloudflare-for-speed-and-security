@@ -1,11 +1,10 @@
-import { Context } from "hono";
-import { Bindings, Variables } from "../hono_bindings";
+import { Context } from "../hono_bindings";
 import { checkAuth, checkIsAdmin, parseAndValidateApiInput } from "../utils";
 import { NotFoundError } from "../errors";
 import { UpdateBlogInput } from "@phoenix/core/api";
 import { Blog } from "@phoenix/core/entities";
 
-export async function updateBlog(ctx: Context<{Bindings: Bindings, Variables: Variables}>): Promise<Response> {
+export async function updateBlog(ctx: Context): Promise<Response> {
   const userId = await checkAuth(ctx);
   await checkIsAdmin(ctx.var.db, userId);
 
