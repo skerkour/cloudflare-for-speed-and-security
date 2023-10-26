@@ -62,7 +62,9 @@ export type UpdateBlogInput = z.infer<typeof UpdateBlogInputValidator>;
 // Pages
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const pageSlugValidator = z.string().min(2).refine((val) => val.startsWith('/'), { message: 'must start with /' })
+const pageSlugValidator = z.string().min(2)
+  .refine((val) => val.startsWith('/'), { message: 'must start with /' })
+  .refine((val) => val.trim() === val, { message: 'whitespaces are not allowed' })
 
 export const CreatePageInputValidator = z.object({
   title: z.string(),

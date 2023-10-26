@@ -22,13 +22,17 @@ export async function login(ctx: Context): Promise<Response> {
     throw new PermissionDeniedError('password is not valid')
   }
 
+  const nowUnixMs = Date.now();
+  const expiresAt = new Date(nowUnixMs + (50 * 1000 * 60 * 60)); // Expires: Now + 50 hours
   const authToken = await jwt.sign({
     user_id: user.id,
-    nbf: Math.floor(Date.now() / 1000), // Not before: Now
-    exp: Math.floor(Date.now() / 1000) + (48 * (60 * 60)) // Expires: Now + 48h
+    // nbf: Math.floor(now / 1000), // Not before: Now
+    exp: Math.floor(expiresAt.getTime() / 1000),
   }, ctx.env.JWT_SECRET);
 
-  setCookie(ctx, 'phoenix_session', authToken);
+  setCookie(ctx, 'phoenix_session', authToken,
+    { httpOnly: true, expires: expiresAt, sameSite: 'Lax', secure: true, path: '/' },
+  );
 
   return ctx.json(convertUser(user));
 }

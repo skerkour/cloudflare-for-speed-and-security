@@ -1,5 +1,4 @@
-import { Bindings, Variables } from "./hono_bindings";
-import { Context } from "hono";
+import { Context } from "./hono_bindings";
 import { getCookie } from "hono/cookie";
 import { InvalidArgumentError, NotFoundError, PermissionDeniedError } from "./errors";
 import jwt from "@phoenix/jwt";
@@ -53,7 +52,7 @@ export function base64ToBuffer(hash: string): ArrayBuffer {
   // return base64.toByteArray(hash).buffer;
 }
 
-export async function checkAuth(ctx: Context<{Bindings: Bindings, Variables: Variables}>): Promise<string> {
+export async function checkAuth(ctx: Context): Promise<string> {
   const authCookie = getCookie(ctx, 'phoenix_session');
   if (!authCookie) {
     throw new PermissionDeniedError('authentication is required');
@@ -87,7 +86,7 @@ export async function checkIsAdmin(db: Pool, userId: string) {
   }
 }
 
-export async function parseAndValidateApiInput<T>(ctx: Context<{Bindings: Bindings, Variables: Variables}>, input: ZodSchema<T>): Promise<T> {
+export async function parseAndValidateApiInput<T>(ctx: Context, input: ZodSchema<T>): Promise<T> {
   let reqBody = null;
 
   let contentTypeHeader = ctx.req.header('Content-Type');
