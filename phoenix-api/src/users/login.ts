@@ -1,15 +1,14 @@
 import { Context } from "hono";
 import { setCookie } from "hono/cookie";
-import { Bindings, Variables } from "../bindings";
-import * as api from "./api";
+import { Bindings, Variables } from "../hono_bindings";
 import jwt from "@phoenix/jwt";
-import { User } from "./entities";
 import { NotFoundError, PermissionDeniedError } from "../errors";
-import { base64ToBuffer, hashPassword } from "../utils";
+import { base64ToBuffer, hashPassword, parseAndValidateApiInput } from "../utils";
+import { LoginInput, convertUser } from "@phoenix/core/api";
+import { User } from "@phoenix/core/entities";
 
 export async function login(ctx: Context<{Bindings: Bindings, Variables: Variables}>): Promise<Response> {
-  const reqBody = await ctx.req.json()
-  const apiInput = api.LoginInput.parse(reqBody);
+  const apiInput = await parseAndValidateApiInput(ctx, LoginInput);
 
   const usersRes = await ctx.var.db.query('SELECT * FROM users WHERE email = $1', [apiInput.email]);
   if (usersRes.rowCount !== 1) {
@@ -32,5 +31,5 @@ export async function login(ctx: Context<{Bindings: Bindings, Variables: Variabl
 
   setCookie(ctx, 'phoenix_session', authToken);
 
-  return ctx.json(api.convertUser(user));
+  return ctx.json(convertUser(user));
 }

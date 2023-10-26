@@ -1,14 +1,13 @@
 import { Context } from "hono";
-import { Bindings, Variables } from "../bindings";
-import * as api from "./api";
-import { bufferToBase64, hashPassword } from "../utils";
+import { Bindings, Variables } from "../hono_bindings";
+import { bufferToBase64, hashPassword, parseAndValidateApiInput } from "../utils";
 import { uuidv7 } from "@phoenix/uuiv7";
-import { User } from "./entities";
 import { InternalServerError, PermissionDeniedError } from "../errors";
+import { User } from "@phoenix/core/entities";
+import { SignupInput, convertUser } from "@phoenix/core/api";
 
 export async function signup(ctx: Context<{Bindings: Bindings, Variables: Variables}>): Promise<Response> {
-  const reqBody = await ctx.req.json()
-  const apiInput = api.SignupInput.parse(reqBody);
+  const apiInput = await parseAndValidateApiInput(ctx, SignupInput);
 
   // for the demo we only allow 2 accounts to be created
   // 1. the admin account to manage resources
@@ -46,5 +45,5 @@ export async function signup(ctx: Context<{Bindings: Bindings, Variables: Variab
   await ctx.var.db.query('INSERT INTO users VALUES ($1, $2, $3, $4, $5, $6)',
     [user.id, user.created_at, user.updated_at, user.email, user.password_hash, user.is_admin]);
 
-  return ctx.json(api.convertUser(user));
+  return ctx.json(convertUser(user));
 }

@@ -2,5 +2,8 @@
     "name": "@phoenix/core",
     "version": "0.1.0",
     "private": true,
-    "type": "module"
-  }
+    "type": "module",
+    "dependencies": {
+        "@phoenix/deepclone": "*"
+    }
+}

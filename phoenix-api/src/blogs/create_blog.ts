@@ -1,17 +1,15 @@
 import { Context } from "hono";
-import { Bindings, Variables } from "../bindings";
-import * as api from "./api";
-import { Blog } from "./entities";
+import { Bindings, Variables } from "../hono_bindings";
 import { uuidv7 } from "@phoenix/uuiv7";
-import { checkAuth, checkIsAdmin } from "../utils";
-import { PermissionDeniedError } from "../errors";
+import { checkAuth, checkIsAdmin, parseAndValidateApiInput } from "../utils";
+import { CreateBlogInput } from "@phoenix/core/api";
+import { Blog } from "@phoenix/core/entities";
 
 export async function createBlog(ctx: Context<{Bindings: Bindings, Variables: Variables}>): Promise<Response> {
   const userId = await checkAuth(ctx);
   await checkIsAdmin(ctx.var.db, userId);
 
-  const reqBody = await ctx.req.json();
-  const apiInput = api.CreateBlogInput.parse(reqBody);
+  const apiInput = await parseAndValidateApiInput(ctx, CreateBlogInput);
 
   const now = new Date();
   const blog: Blog = {

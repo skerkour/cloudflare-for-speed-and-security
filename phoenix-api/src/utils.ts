@@ -1,13 +1,15 @@
-import { Bindings, Variables } from "./bindings";
+import { Bindings, Variables } from "./hono_bindings";
 import { Context } from "hono";
 import { getCookie } from "hono/cookie";
-import { NotFoundError, PermissionDeniedError } from "./errors";
+import { InvalidArgumentError, NotFoundError, PermissionDeniedError } from "./errors";
 import jwt from "@phoenix/jwt";
 import { Pool } from "@neondatabase/serverless";
-import { User } from "./users/entities";
-import * as base64 from '@phoenix/base64'
+import { ZodSchema } from "zod";
+import { User } from "@phoenix/core/entities";
 
-// Hash the given password with PBKDF2-SHA-512 using userId as a salt
+/**
+ * Hash the given password with `PBKDF2-SHA-512` using userId as a salt
+ */
 export async function hashPassword(password: string, userId: string): Promise<ArrayBuffer> {
   const textEncoder = new TextEncoder();
 
@@ -35,14 +37,20 @@ export async function hashPassword(password: string, userId: string): Promise<Ar
   );
 }
 
-// encodes an ArrayBuffer to base64
+/**
+ * encodes an ArrayBuffer to base64
+ */
 export function bufferToBase64(hash: ArrayBuffer): string {
-  return base64.fromByteArray(new Uint8Array(hash));
+  return btoa(String.fromCharCode(...new Uint8Array(hash)))
+  // return base64.fromByteArray(new Uint8Array(hash));
 }
 
-// decodes a base64 string to an ArrayBuffer
+/**
+ * decodes a base64 string to an ArrayBuffer
+ */
 export function base64ToBuffer(hash: string): ArrayBuffer {
-  return base64.toByteArray(hash).buffer;
+  return Uint8Array.from(atob(hash), c => c.charCodeAt(0));
+  // return base64.toByteArray(hash).buffer;
 }
 
 export async function checkAuth(ctx: Context<{Bindings: Bindings, Variables: Variables}>): Promise<string> {
@@ -65,7 +73,9 @@ export async function checkAuth(ctx: Context<{Bindings: Bindings, Variables: Var
   return payload.user_id as string;
 }
 
-// for the demo we only allow Admins to performs create/update/delete actions
+/**
+ * We only allow Admins to performs create/update/delete actions for the demo
+ */
 export async function checkIsAdmin(db: Pool, userId: string) {
   const usersRes = await db.query('SELECT * FROM users WHERE id = $1', [userId]);
   if (usersRes.rowCount !== 1) {
@@ -75,4 +85,22 @@ export async function checkIsAdmin(db: Pool, userId: string) {
   if (!user.is_admin) {
     throw new PermissionDeniedError();
   }
+}
+
+export async function parseAndValidateApiInput<T>(ctx: Context<{Bindings: Bindings, Variables: Variables}>, input: ZodSchema<T>): Promise<T> {
+  let reqBody = null;
+
+  let contentTypeHeader = ctx.req.header('Content-Type');
+  if (!contentTypeHeader || !contentTypeHeader.includes('application/json')) {
+    throw new InvalidArgumentError('Request is not JSON');
+  }
+
+  try {
+    reqBody = await ctx.req.json()
+  } catch (err) {
+    throw new InvalidArgumentError('JSON is not valid');
+  }
+
+  const apiInput = input.parse(reqBody);
+  return apiInput;
 }

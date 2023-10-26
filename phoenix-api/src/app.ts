@@ -1,9 +1,9 @@
 import { Hono } from 'hono';
 import { Pool, neonConfig } from '@neondatabase/serverless';
 import { ErrorCode, NotFoundError, PermissionDeniedError, formatZodError } from './errors';
-import { ApiError, ApiResponse } from '@phoenix/core/api';
+import { ApiError, ApiResponse, Routes } from '@phoenix/core/api';
 import { requestIdMiddleware } from '@phoenix/core/middlewares';
-import { Bindings, Variables } from './bindings';
+import { Bindings, Variables } from './hono_bindings';
 import { ZodError } from 'zod';
 import { createPage } from './blogs/create_page';
 import { headlessGetPosts } from './blogs/headless_get_posts';
@@ -38,22 +38,22 @@ app.get('/', (ctx) => {
   return ctx.json({ message: 'Hello Phoenix!' });
 });
 
-app.post('/signup', signup);
-app.post('/login', signup);
+app.post(Routes.Signup, signup);
+app.post(Routes.Login, signup);
 
-app.get('/blogs', getBlogs);
-app.post('/create_blog', createBlog);
-app.post('/update_blog', updateBlog);
+app.post(Routes.Login, getBlogs);
+app.post(Routes.CreateBlog, createBlog);
+app.post(Routes.UpdateBlog, updateBlog);
 
-app.get('/pages', getPages);
-app.post('/create_page', createPage);
-app.post('/page', getPage);
-app.post('/delete_page', deletePage);
-app.post('/update_page', updatePage);
+app.post(Routes.Pages, getPages);
+app.post(Routes.UpdatePage, createPage);
+app.post(Routes.Page, getPage);
+app.post(Routes.DeletePage, deletePage);
+app.post(Routes.UpdatePage, updatePage);
 
 // headless API
-app.get('/headless/posts', headlessGetPosts);
-app.get('/headless/page', headlessGetPage);
+app.get(Routes.HeadlessPosts, headlessGetPosts);
+app.get(Routes.HeadlessPage, headlessGetPage);
 
 
 app.onError((err, c) => {

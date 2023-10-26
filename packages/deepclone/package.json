@@ -1,0 +1,9 @@
+{
+    "name": "@phoenix/deepclone",
+    "version": "1.0.0",
+    "description": "Really Fast Deep Clone",
+    "main": "index.js",
+    "exports": {
+      ".": "./index.js"
+    }
+  }
