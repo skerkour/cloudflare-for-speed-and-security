@@ -61,7 +61,7 @@ app.get(Routes.HeadlessPosts, headlessGetPosts);
 app.get(Routes.HeadlessPage, headlessGetPage);
 
 
-app.onError((err, c) => {
+app.onError((err, ctx) => {
   let apiErr: ApiError = {
     code: ErrorCode.InternalServerError,
     message: 'Internal Server error',
@@ -84,14 +84,18 @@ app.onError((err, c) => {
     console.error(err);
   }
 
+  ctx.res.headers.set('Cache-Control', 'private, no-cache, no-store, must-revalidate')
+
   const res: ApiResponse<null> = {
     data: null,
     error: apiErr,
   };
-  return c.json(res, statusCode);
+  return ctx.json(res, statusCode);
 });
 
 app.notFound(async (ctx) => {
+  ctx.res.headers.set('Cache-Control', 'private, no-cache, no-store, must-revalidate')
+
   return ctx.json({
     data: null,
     error: {
