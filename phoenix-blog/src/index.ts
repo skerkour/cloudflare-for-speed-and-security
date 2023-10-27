@@ -1,6 +1,7 @@
 import { Hono } from 'hono';
 import { etagMiddleware } from '@phoenix/core/middlewares';
 import Handlebars from './templates';
+import robotsTxt from './public/robots.txt';
 
 type Bindings = {
   api: Fetcher;
@@ -13,6 +14,10 @@ type Variables = {
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>();
 
 app.use('*', etagMiddleware());
+app.use('*', async (ctx, next) => {
+  await next();
+  ctx.res.headers.set('X-Robots-Tag', 'noindex');
+})
 
 app.get('/', async (ctx) => {
   // service bindings expects a request with a full URL, se we set an invalid host
@@ -27,6 +32,10 @@ app.get('/', async (ctx) => {
 
   return ctx.html(html);
 });
+
+app.get('/robots.txt', async (ctx) => {
+  return ctx.text(robotsTxt);
+})
 
 app.get('*', async (ctx) => {
   const reqUrl = new URL(ctx.req.url);
