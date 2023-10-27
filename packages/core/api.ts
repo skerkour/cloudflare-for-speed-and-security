@@ -55,6 +55,20 @@ export const CreateBlogInputValidator = z.object({
 export type CreateBlogInput = z.infer<typeof CreateBlogInputValidator>;
 
 
+export const GetBlogInputValidator = z.object({
+  blog_id: z.string(),
+}).strict();
+
+export type GetBlogInput = z.infer<typeof GetBlogInputValidator>;
+
+
+export const DeleteBlogInputValidator = z.object({
+  blog_id: z.string(),
+}).strict();
+
+export type DeleteBlogInput = z.infer<typeof DeleteBlogInputValidator>;
+
+
 export const UpdateBlogInputValidator = z.object({
   blog_id: z.string(),
   slug: blogSlug.optional(),

@@ -17,6 +17,8 @@ import { createBlog } from './blogs/create_blog';
 import { signup } from './users/signup';
 import { login } from './users/login';
 import { updateBlog } from './blogs/update_blog';
+import { getBlog } from './blogs/get_blog';
+import { deleteBlog } from './blogs/delete_blog';
 
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>();
 
@@ -43,8 +45,10 @@ app.post(Routes.Signup, signup);
 app.post(Routes.Login, login);
 
 app.post(Routes.Blogs, getBlogs);
+app.post(Routes.Blog, getBlog);
 app.post(Routes.CreateBlog, createBlog);
 app.post(Routes.UpdateBlog, updateBlog);
+app.post(Routes.DeleteBlog, deleteBlog);
 
 app.post(Routes.Pages, getPages);
 app.post(Routes.CreatePage, createPage);

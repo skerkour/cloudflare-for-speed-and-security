@@ -3,12 +3,14 @@ export enum Routes {
   Login = '/login',
 
   Blogs = '/blogs',
+  Blog = '/blog',
   CreateBlog = '/create_blog',
   UpdateBlog = '/update_blog',
+  DeleteBlog = '/delete_blog',
 
   Pages = '/pages',
-  CreatePage = '/create_page',
   Page = '/page',
+  CreatePage = '/create_page',
   DeletePage = '/delete_page',
   UpdatePage = '/update_page',
 

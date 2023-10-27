@@ -1,4 +1,4 @@
-import { CreateBlogInput, GetPageInput, LoginInput, Routes, SignupInput, UserApi } from "./api";
+import { CreateBlogInput, DeleteBlogInput, GetBlogInput, GetPageInput, LoginInput, Routes, SignupInput, UserApi } from "./api";
 import { Blog, Page } from "./entities";
 
 const networkErrorMessage = 'Network error';
@@ -78,10 +78,11 @@ export class ApiClient {
   }
 }
 
-export async function getPage(client: ApiClient, input: GetPageInput): Promise<Page> {
-  const page: Page = await client.post(Routes.Page, input);
-  return page;
-}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Users
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export async function login(client: ApiClient, input: LoginInput): Promise<UserApi> {
   const user: UserApi = await client.post(Routes.Login, input);
@@ -93,6 +94,11 @@ export async function signup(client: ApiClient, input: SignupInput): Promise<Use
   return user;
 }
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Blogs
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 export async function getBlogs(client: ApiClient): Promise<Blog[]> {
   const blogs: Blog[] = await client.post(Routes.Blogs, {});
   return blogs;
@@ -101,4 +107,22 @@ export async function getBlogs(client: ApiClient): Promise<Blog[]> {
 export async function createBlog(client: ApiClient, input: CreateBlogInput): Promise<Blog> {
   const blog: Blog = await client.post(Routes.CreateBlog, input);
   return blog;
+}
+
+export async function getBlog(client: ApiClient, input: GetBlogInput): Promise<Blog> {
+  const blog: Blog = await client.post(Routes.Blog, input);
+  return blog;
+}
+
+export async function deleteBlog(client: ApiClient, input: DeleteBlogInput) {
+  await client.post(Routes.DeleteBlog, input);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Pages
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export async function getPage(client: ApiClient, input: GetPageInput): Promise<Page> {
+  const page: Page = await client.post(Routes.Page, input);
+  return page;
 }

@@ -51,7 +51,6 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router';
 import CfButton from '@/components/cf_button.vue';
 import SlugInput from '@/components/slug_input.vue';
-import { useStore } from '@/app/store';
 import { slugify } from '@/app/slugify';
 import type { CreateBlogInput } from '@phoenix/core/api';
 import * as api from '@phoenix/core/api';

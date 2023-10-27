@@ -1,12 +1,7 @@
 <template>
   <div class="fixed inset-y-0 flex w-64 flex-col border-r border-gray-200 bg-gray-50 pb-4 pt-5">
-      <div class="flex flex-shrink-0 items-center px-6">
-        <RouterLink to="/">
-          <img class="h-8 w-auto" src="/webapp/logo.svg" alt="Cloudflare for Speed and Security" />
-        </RouterLink>
-      </div>
       <!-- Sidebar component, swap this element with another sidebar if you like -->
-      <div class="mt-5 flex h-0 flex-1 flex-col overflow-y-auto pt-1">
+      <div class="flex h-0 flex-1 flex-col overflow-y-auto pt-1">
         <!-- User account dropdown -->
         <Menu as="div" class="relative inline-block px-3 text-left">
           <div>
@@ -59,31 +54,17 @@
 import { onBeforeMount, ref, watch, type Ref, markRaw } from 'vue';
 import { useRoute } from 'vue-router';
 import {
-  DocumentTextIcon,
-  PhotoIcon,
-  TagIcon,
-  CodeBracketIcon,
-  ArrowsRightLeftIcon,
-  UserGroupIcon,
-  ListBulletIcon,
-  ReceiptPercentIcon,
-  ShoppingCartIcon,
-  EnvelopeIcon,
   Cog6ToothIcon,
-  MapIcon,
+  HomeIcon,
+  DocumentIcon,
 } from '@heroicons/vue/24/outline';
 import {
-  Dialog,
-  DialogPanel,
   Menu,
   MenuButton,
   MenuItem,
   MenuItems,
-  TransitionChild,
-  TransitionRoot,
 } from '@headlessui/vue'
-import { Bars3CenterLeftIcon, Bars4Icon, ClockIcon, HomeIcon, XMarkIcon } from '@heroicons/vue/24/outline'
-import { ChevronRightIcon, ChevronUpDownIcon, EllipsisVerticalIcon, MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
+import { ChevronUpDownIcon } from '@heroicons/vue/20/solid'
 import secondaryNavigation from '@/app/navigation';
 import CfLink from '@/components/cf_link.vue'
 
@@ -115,9 +96,17 @@ watch($route, () => setNav(), { deep: true });
 // functions
 function setNav() {
   const blogId = $route.params.blog_id;
-  navigation.value = [
-    { name: 'Home', to: `/`, icon: HomeIcon, current: false },
-  ];
+  if ($route.path.startsWith('/blogs/') && $route.path !== '/blogs/new') {
+    navigation.value = [
+      { name: 'Home', to: `/`, icon: HomeIcon, current: false },
+      { name: 'Pages', to: `/blogs/${blogId}/pages`, icon: DocumentIcon, current: false },
+      { name: 'Settings', to: `/blogs/${blogId}/settings`, icon: Cog6ToothIcon, current: false },
+    ];
+  } else {
+    navigation.value = [
+      { name: 'Home', to: `/`, icon: HomeIcon, current: false },
+    ];
+  }
 }
 
 function logout() {

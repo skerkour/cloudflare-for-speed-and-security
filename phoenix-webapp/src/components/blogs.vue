@@ -1,5 +1,19 @@
 <template>
-  <div class="flex flex-col justify-center max-w-2xl mx-auto">
+  <div class="text-center" v-if="blogs.length === 0">
+    <FireIcon class="inline-flex items-center -ml-0.5 mr-1.5 h-16 w-16 color-grey" aria-hidden="true" />
+    <h3 class="mt-2 text-sm font-semibold text-gray-900">No blogs</h3>
+    <p class="mt-1 text-sm text-gray-500">Get started by creating a new blog.</p>
+    <div class="mt-6">
+      <RouterLink  :to="newBlogUrl">
+        <CfButton class="inline-flex items-center">
+          <PlusIcon class="-ml-0.5 mr-1.5 h-5 w-5" aria-hidden="true" />
+          New Blog
+        </CfButton>
+      </RouterLink>
+    </div>
+  </div>
+
+  <div v-else class="flex flex-col justify-center max-w-2xl mx-auto">
     <div class="flex">
       <RouterLink  :to="newBlogUrl">
         <CfButton>
@@ -40,7 +54,7 @@ import { useApiClient } from '@/app/api_client';
 import type { Blog } from '@phoenix/core/entities';
 import { onBeforeMount, ref, type Ref } from 'vue';
 import * as api from '@phoenix/core/api';
-import { PlusIcon } from '@heroicons/vue/24/outline';
+import { PlusIcon, FireIcon, ChevronRightIcon } from '@heroicons/vue/24/outline';
 import CfButton from '@/components/cf_button.vue';
 
 // props
