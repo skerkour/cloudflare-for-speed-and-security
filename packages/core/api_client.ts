@@ -1,5 +1,6 @@
-import { CreateBlogInput, CreatePageInput, DeleteBlogInput, DeletePageInput, GetBlogInput, GetPageInput, GetPagesInput, LoginInput, Routes, SignupInput, UpdatePageInput, UserApi } from "./api";
-import { Blog, Page } from "./entities";
+import type { CreateBlogInput, CreatePageInput, DeleteBlogInput, DeletePageInput, GetBlogInput, GetPageInput, GetPagesInput, LoginInput, SignupInput, UpdatePageInput, UserApi } from "./api";
+import { Routes } from './api';
+import type { Blog, Page } from "./entities";
 
 const networkErrorMessage = 'Network error';
 

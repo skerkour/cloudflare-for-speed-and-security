@@ -1,7 +1,7 @@
 import { z } from 'zod';
-import { PageType, User } from './entities';
+import { PageType, type User } from './entities';
 import deepClone from '@phoenix/deepclone';
-import { ApiResponse } from './api_client';
+import type { ApiResponse } from './api_client';
 
 export * from './api_client';
 export * from './api_routes';

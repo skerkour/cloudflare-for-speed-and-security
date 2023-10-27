@@ -14,13 +14,16 @@ export async function signup(ctx: Context): Promise<Response> {
   // 1. the admin account to manage resources
   // 2. the readers account with read-only access
   let isAdmin = false;
-  const usersCountRes = await ctx.var.db.query('SELECT COUNT(*) as users_count FROM users');
+  const usersCountRes = await ctx.var.db.query('SELECT COUNT(*)::BIGINT as users_count FROM users');
   if (usersCountRes.rowCount !== 1) {
     throw new InternalServerError();
   }
-  const usersCount = usersCountRes.rows[0].users_count as number | undefined;
+  let usersCount = usersCountRes.rows[0].users_count as number | undefined;
   if (usersCount === undefined) {
     throw new InternalServerError();
+  } else if (typeof usersCount === 'string') {
+    // for some reasons, pg returns a string...
+    usersCount = parseInt(usersCount, 10);
   }
 
   if (usersCount === 0) {

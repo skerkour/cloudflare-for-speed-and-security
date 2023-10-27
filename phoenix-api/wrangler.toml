@@ -4,3 +4,5 @@ compatibility_date = "2023-09-18"
 
 [placement]
 mode = "smart"
+
+[vars]

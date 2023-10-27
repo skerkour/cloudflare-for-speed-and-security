@@ -13,8 +13,6 @@
         "url": "git+https://github.com/skerkour/cloudflare-for-speed-and-security.git"
     },
     "dependencies": {
-        "@phoenix/core": "*",
-        "@phoenix/uuiv7": "*",
         "handlebars": "^4.7.8",
         "hono": "^3.8.3"
     }

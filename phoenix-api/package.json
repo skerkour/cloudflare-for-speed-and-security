@@ -13,10 +13,6 @@
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.6.0",
-    "@phoenix/base64": "*",
-    "@phoenix/core": "*",
-    "@phoenix/jwt": "*",
-    "@phoenix/uuiv7": "*",
     "hono": "^3.8.3"
   }
 }
