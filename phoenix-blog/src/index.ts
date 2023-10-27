@@ -16,7 +16,7 @@ app.use('*', etagMiddleware());
 
 app.get('/', async (ctx) => {
   // service bindings expects a request with a full URL, se we set an invalid host
-  const apiReq = new Request('https://localhost/headless/posts', ctx.req.raw.clone());
+  const apiReq = new Request('https://localhost/headless/posts', ctx.req.raw);
   const apiRes = await ctx.env.api.fetch(apiReq);
   const posts = await apiRes.json();
 
@@ -40,7 +40,7 @@ app.get('*', async (ctx) => {
   let url = 'https://localhost/headless/page';
   url += `?${urlSearchParams.toString()}`;
 
-  const req = new Request(url, ctx.req.raw.clone());
+  const req = new Request(url, ctx.req.raw);
   const res = await ctx.env.api.fetch(req);
   const page: any = await res.json();
 

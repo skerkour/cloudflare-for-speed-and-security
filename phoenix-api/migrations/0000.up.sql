@@ -20,8 +20,7 @@ CREATE TABLE blogs (
     navigation JSONB NOT NULL,
     description TEXT NOT NULL
 );
-CREATE INDEX index_blogs_on_user_id ON blogs (user_id);
-CREATE UNIQUE INDEX index_blogs_on_slug ON blogs (user_id);
+CREATE UNIQUE INDEX index_blogs_on_slug ON blogs (slug);
 
 
 CREATE TYPE PAGE_TYPE AS ENUM ('page', 'post');

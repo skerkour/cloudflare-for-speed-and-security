@@ -2,7 +2,7 @@ import { checkAuth, parseAndValidateApiInput } from "../utils";
 import { NotFoundError } from "../errors";
 import { uuidv7 } from "@phoenix/uuiv7";
 import { checkIsAdmin } from "../utils";
-import { CreatePageInputValidator } from "@phoenix/core/api";
+import { CreatePageInputValidator, convertToApiResponse } from "@phoenix/core/api";
 import { Blog, Page } from "@phoenix/core/entities";
 import { Context } from "../hono_bindings";
 
@@ -34,5 +34,5 @@ export async function createPage(ctx: Context): Promise<Response> {
     [page.id, page.created_at, page.updated_at, page.slug, page.type, page.title, page.content_html, page.blog_id],
   );
 
-  return ctx.json(page);
+  return ctx.json(convertToApiResponse(page));
 }

@@ -1,5 +1,6 @@
 'use strict'
-module.exports = deepClone
+
+export default deepClone;
 
 function copyBuffer (cur) {
   if (cur instanceof Buffer) {

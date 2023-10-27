@@ -3,7 +3,7 @@ import { Context } from "../hono_bindings";
 import jwt from "@phoenix/jwt";
 import { NotFoundError, PermissionDeniedError } from "../errors";
 import { base64ToBuffer, hashPassword, parseAndValidateApiInput } from "../utils";
-import { LoginInputValidator, convertUser } from "@phoenix/core/api";
+import { LoginInputValidator, convertToApiResponse, convertUser } from "@phoenix/core/api";
 import { User } from "@phoenix/core/entities";
 
 export async function login(ctx: Context): Promise<Response> {
@@ -30,9 +30,10 @@ export async function login(ctx: Context): Promise<Response> {
     exp: Math.floor(expiresAt.getTime() / 1000),
   }, ctx.env.JWT_SECRET);
 
+  // in a real-world application you want to set the httpOnly flag as true
   setCookie(ctx, 'phoenix_session', authToken,
-    { httpOnly: true, expires: expiresAt, sameSite: 'Lax', secure: true, path: '/' },
+    { httpOnly: false, expires: expiresAt, sameSite: 'Lax', secure: true, path: '/' },
   );
 
-  return ctx.json(convertUser(user));
+  return ctx.json(convertToApiResponse(convertUser(user)));
 }

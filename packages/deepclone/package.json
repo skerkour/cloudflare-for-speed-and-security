@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "description": "Really Fast Deep Clone",
     "main": "index.js",
+    "type": "module",
     "exports": {
       ".": "./index.js"
     }

@@ -1,7 +1,7 @@
 import { Context } from "../hono_bindings";
 import { checkAuth, checkIsAdmin, parseAndValidateApiInput } from "../utils";
 import { NotFoundError } from "../errors";
-import { UpdateBlogInputValidator } from "@phoenix/core/api";
+import { UpdateBlogInputValidator, convertToApiResponse } from "@phoenix/core/api";
 import { Blog } from "@phoenix/core/entities";
 
 export async function updateBlog(ctx: Context): Promise<Response> {
@@ -28,5 +28,5 @@ export async function updateBlog(ctx: Context): Promise<Response> {
     [blog.updated_at, blog.slug, blog.name, blog.navigation, blog.description, blog.id],
   );
 
-  return ctx.json(blog);
+  return ctx.json(convertToApiResponse(blog));
 }

@@ -1,9 +1,17 @@
 import { z } from 'zod';
 import { PageType, User } from './entities';
 import deepClone from '@phoenix/deepclone';
+import { ApiResponse } from './api_client';
 
 export * from './api_client';
 export * from './api_routes';
+
+export function convertToApiResponse<T>(data: T): ApiResponse<T> {
+  return {
+    data: data,
+    error: null,
+  }
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Users

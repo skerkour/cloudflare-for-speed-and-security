@@ -1,7 +1,7 @@
 import { Context } from "../hono_bindings";
 import { checkAuth, checkIsAdmin, parseAndValidateApiInput } from "../utils";
 import { NotFoundError } from "../errors";
-import { UpdatePageInputValidator } from "@phoenix/core/api";
+import { UpdatePageInputValidator, convertToApiResponse } from "@phoenix/core/api";
 import { Page } from "@phoenix/core/entities";
 
 export async function updatePage(ctx: Context): Promise<Response> {
@@ -27,5 +27,5 @@ export async function updatePage(ctx: Context): Promise<Response> {
     [page.updated_at, page.slug, page.title, page.content_html, page.id],
   );
 
-  return ctx.json({});
+  return ctx.json(convertToApiResponse(page));
 }

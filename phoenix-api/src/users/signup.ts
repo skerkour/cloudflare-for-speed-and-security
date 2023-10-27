@@ -2,8 +2,10 @@ import { bufferToBase64, hashPassword, parseAndValidateApiInput } from "../utils
 import { uuidv7 } from "@phoenix/uuiv7";
 import { InternalServerError, PermissionDeniedError } from "../errors";
 import { User } from "@phoenix/core/entities";
-import { SignupInputValidator, convertUser } from "@phoenix/core/api";
+import { SignupInputValidator, convertToApiResponse, convertUser } from "@phoenix/core/api";
 import { Context } from "../hono_bindings";
+import jwt from "@phoenix/jwt";
+import { setCookie } from "hono/cookie";
 
 export async function signup(ctx: Context): Promise<Response> {
   const apiInput = await parseAndValidateApiInput(ctx, SignupInputValidator);
@@ -17,14 +19,14 @@ export async function signup(ctx: Context): Promise<Response> {
     throw new InternalServerError();
   }
   const usersCount = usersCountRes.rows[0].users_count as number | undefined;
-  if (!usersCount) {
+  if (usersCount === undefined) {
     throw new InternalServerError();
   }
 
   if (usersCount === 0) {
     isAdmin = true;
   } else if (usersCount >= 2) {
-    throw new PermissionDeniedError();
+    throw new PermissionDeniedError('registrations are closed for the demo');
   }
 
   const newUserId = uuidv7();
@@ -44,5 +46,19 @@ export async function signup(ctx: Context): Promise<Response> {
   await ctx.var.db.query('INSERT INTO users VALUES ($1, $2, $3, $4, $5, $6)',
     [user.id, user.created_at, user.updated_at, user.email, user.password_hash, user.is_admin]);
 
-  return ctx.json(convertUser(user));
+
+  const nowUnixMs = Date.now();
+  const expiresAt = new Date(nowUnixMs + (50 * 1000 * 60 * 60)); // Expires: Now + 50 hours
+  const authToken = await jwt.sign({
+    user_id: user.id,
+    // nbf: Math.floor(now / 1000), // Not before: Now
+    exp: Math.floor(expiresAt.getTime() / 1000),
+  }, ctx.env.JWT_SECRET);
+
+  // in a real-world application you want to set the httpOnly flag as true
+  setCookie(ctx, 'phoenix_session', authToken,
+    { httpOnly: false, expires: expiresAt, sameSite: 'Lax', secure: true, path: '/' },
+  );
+
+  return ctx.json(convertToApiResponse(convertUser(user)));
 }

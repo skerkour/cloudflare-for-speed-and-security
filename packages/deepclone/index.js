@@ -1,3 +1,5 @@
 'use strict'
 
-module.exports = require('./deepclone.js')()
+import deepClone from './deepclone.js'
+
+export default deepClone()

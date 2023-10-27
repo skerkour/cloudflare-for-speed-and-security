@@ -24,7 +24,7 @@ export async function hashPassword(password: string, userId: string): Promise<Ar
   // See OWASP recommendations for the number of PBKDF2 iterations https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
   // as of October 2023, Cloudflare Workers limits the number of PBKDF2 iterations to 100,000
   // See https://github.com/cloudflare/workerd/issues/1346
-  return await crypto.subtle.deriveBits(
+  return (await crypto.subtle.deriveBits(
     {
       name: 'PBKDF2',
       salt: textEncoder.encode(userId),
@@ -33,7 +33,7 @@ export async function hashPassword(password: string, userId: string): Promise<Ar
     },
     key,
     512,
-  );
+  ));
 }
 
 /**
@@ -48,7 +48,7 @@ export function bufferToBase64(hash: ArrayBuffer): string {
  * decodes a base64 string to an ArrayBuffer
  */
 export function base64ToBuffer(hash: string): ArrayBuffer {
-  return Uint8Array.from(atob(hash), c => c.charCodeAt(0));
+  return Uint8Array.from(atob(hash), c => c.charCodeAt(0)).buffer;
   // return base64.toByteArray(hash).buffer;
 }
 
@@ -82,7 +82,7 @@ export async function checkIsAdmin(db: Pool, userId: string) {
   }
   const user: User = usersRes.rows[0];
   if (!user.is_admin) {
-    throw new PermissionDeniedError();
+    throw new PermissionDeniedError('Some actions are disabled for the demo');
   }
 }
 

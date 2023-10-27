@@ -15,6 +15,7 @@ import { updatePage } from './blogs/update_page';
 import { getBlogs } from './blogs/get_blogs';
 import { createBlog } from './blogs/create_blog';
 import { signup } from './users/signup';
+import { login } from './users/login';
 import { updateBlog } from './blogs/update_blog';
 
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>();
@@ -39,14 +40,14 @@ app.get('/', (ctx) => {
 });
 
 app.post(Routes.Signup, signup);
-app.post(Routes.Login, signup);
+app.post(Routes.Login, login);
 
-app.post(Routes.Login, getBlogs);
+app.post(Routes.Blogs, getBlogs);
 app.post(Routes.CreateBlog, createBlog);
 app.post(Routes.UpdateBlog, updateBlog);
 
 app.post(Routes.Pages, getPages);
-app.post(Routes.UpdatePage, createPage);
+app.post(Routes.CreatePage, createPage);
 app.post(Routes.Page, getPage);
 app.post(Routes.DeletePage, deletePage);
 app.post(Routes.UpdatePage, updatePage);
@@ -79,7 +80,7 @@ app.onError((err, c) => {
     console.error(err);
   }
 
-  const res: ApiResponse = {
+  const res: ApiResponse<null> = {
     data: null,
     error: apiErr,
   };

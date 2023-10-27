@@ -1,6 +1,6 @@
 import { uuidv7 } from "@phoenix/uuiv7";
 import { checkAuth, checkIsAdmin, parseAndValidateApiInput } from "../utils";
-import { CreateBlogInputValidator } from "@phoenix/core/api";
+import { CreateBlogInputValidator, convertToApiResponse } from "@phoenix/core/api";
 import { Blog } from "@phoenix/core/entities";
 import { Context } from "../hono_bindings";
 
@@ -25,5 +25,5 @@ export async function createBlog(ctx: Context): Promise<Response> {
     [blog.id, blog.created_at, blog.updated_at, blog.name, blog.slug, blog.navigation, blog.description],
   );
 
-  return ctx.json(blog);
+  return ctx.json(convertToApiResponse(blog));
 }
