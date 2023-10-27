@@ -30,7 +30,9 @@ export async function createPage(ctx: Context): Promise<Response> {
     blog_id: blog.id,
   };
 
-  await ctx.var.db.query('INSERT INTO pages VALUES($1, $2, $3, $4, $5, $6, $7, $8)',
+  await ctx.var.db.query(`INSERT INTO pages
+    (id, created_at, updated_at, slug, type, title, content_html, blog_id)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
     [page.id, page.created_at, page.updated_at, page.slug, page.type, page.title, page.content_html, page.blog_id],
   );
 

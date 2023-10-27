@@ -1,8 +1,9 @@
 <template>
-  <h1>New Page</h1>
+  <PageEditor />
 </template>
 
 <script lang="ts" setup>
+import PageEditor from '@/components/page_editor.vue';
 // props
 
 // events

@@ -8,6 +8,7 @@
       </div>
     </div>
   </div>
+
   <div class="text-center" v-if="!loading && blogs.length === 0">
     <FireIcon class="inline-flex items-center -ml-0.5 mr-1.5 h-16 w-16 color-grey" aria-hidden="true" />
     <h3 class="mt-2 text-sm font-semibold text-gray-900">No blogs</h3>

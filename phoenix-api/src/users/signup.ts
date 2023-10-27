@@ -43,7 +43,9 @@ export async function signup(ctx: Context): Promise<Response> {
     is_admin: isAdmin,
   };
 
-  await ctx.var.db.query('INSERT INTO users VALUES ($1, $2, $3, $4, $5, $6)',
+  await ctx.var.db.query(`INSERT INTO users
+    (id, created_at, updated_at, email, password_hash, is_admin)
+    VALUES ($1, $2, $3, $4, $5, $6)`,
     [user.id, user.created_at, user.updated_at, user.email, user.password_hash, user.is_admin]);
 
 
