@@ -98,7 +98,6 @@ async function createBlog() {
 
 function onNameChanged() {
   if (!slugManuallyUpdated) {
-    name.value = name.value.trim();
     slug.value = slugify(name.value);
   }
 }

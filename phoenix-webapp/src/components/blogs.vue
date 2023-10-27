@@ -1,5 +1,14 @@
 <template>
-  <div class="text-center" v-if="blogs.length === 0">
+  <div class="rounded-md bg-red-50 p-4 mb-3" v-if="error">
+    <div class="flex">
+      <div class="ml-3">
+        <p class="text-sm text-red-700">
+          {{ error }}
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="text-center" v-if="!loading && blogs.length === 0">
     <FireIcon class="inline-flex items-center -ml-0.5 mr-1.5 h-16 w-16 color-grey" aria-hidden="true" />
     <h3 class="mt-2 text-sm font-semibold text-gray-900">No blogs</h3>
     <p class="mt-1 text-sm text-gray-500">Get started by creating a new blog.</p>
@@ -13,7 +22,7 @@
     </div>
   </div>
 
-  <div v-else class="flex flex-col justify-center max-w-2xl mx-auto">
+  <div v-else-if="!loading && blogs.length > 0" class="flex flex-col justify-center max-w-2xl mx-auto">
     <div class="flex">
       <RouterLink  :to="newBlogUrl">
         <CfButton>
@@ -35,7 +44,7 @@
                   {{ blog.name }}
                 </p>
                 <p class="mt-1 flex text-xs leading-5 text-gray-500">
-                  <span class="relative truncate">{{ blog.slug }}</span>
+                  <span class="relative truncate">{{ blog.slug }}.cloudflarebook.net</span>
                 </p>
               </div>
             </div>

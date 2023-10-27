@@ -1,4 +1,4 @@
-import { CreateBlogInput, DeleteBlogInput, GetBlogInput, GetPageInput, LoginInput, Routes, SignupInput, UserApi } from "./api";
+import { CreateBlogInput, DeleteBlogInput, GetBlogInput, GetPageInput, GetPagesInput, LoginInput, Routes, SignupInput, UserApi } from "./api";
 import { Blog, Page } from "./entities";
 
 const networkErrorMessage = 'Network error';
@@ -125,4 +125,9 @@ export async function deleteBlog(client: ApiClient, input: DeleteBlogInput) {
 export async function getPage(client: ApiClient, input: GetPageInput): Promise<Page> {
   const page: Page = await client.post(Routes.Page, input);
   return page;
+}
+
+export async function getPages(client: ApiClient, input: GetPagesInput): Promise<Page[]> {
+  const pages: Page[] = await client.post(Routes.Pages, input);
+  return pages;
 }
