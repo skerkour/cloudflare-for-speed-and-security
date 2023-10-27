@@ -3,9 +3,8 @@ interface Env {
 }
 
 export const onRequest: PagesFunction<Env> = async (context) => {
-	const req = context.request.clone();
-	const url = req.url.replace('/api', '/');
-	const apiReq = new Request(url, req);
+	const url = context.request.url.replace('/api/', '/');
+	const apiReq = new Request(url, context.request);
 
 	return context.env.api.fetch(apiReq);
 }

@@ -3,8 +3,5 @@
     X-Content-Type-Options: nosniff
     X-Frame-Options: Deny
 
-/webapp/*.js
-    Cache-Control: public, max-age=31536000, immutable
-
-/webapp/*.css
+/webapp/*
     Cache-Control: public, max-age=31536000, immutable

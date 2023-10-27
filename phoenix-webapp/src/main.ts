@@ -4,11 +4,24 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
 import App from './app.vue'
-import router from './router'
+import router from '@/app/router'
+import { createApiClient } from './app/api_client'
+import { useStore } from './app/store'
 
-const app = createApp(App)
+async function main() {
+  const app = createApp(App)
 
-app.use(createPinia())
-app.use(router)
+  app.use(createPinia())
+  app.use(router);
 
-app.mount('#app')
+  if (document.cookie.includes('phoenix_session')) {
+    const $store = useStore();
+    $store.setIsAutenticated(true);
+  }
+
+  createApiClient();
+
+  app.mount('#app')
+}
+
+main();

@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "wrangler pages dev --proxy 9090 -- vite --strictPort --port 9090",
+    "dev": "wrangler pages dev --proxy 9090 --service api=phoenix-api -- vite --strictPort --port 9090",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
