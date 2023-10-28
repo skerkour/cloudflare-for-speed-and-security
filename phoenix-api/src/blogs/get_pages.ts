@@ -8,7 +8,9 @@ export async function getPages(ctx: Context): Promise<Response> {
 
   const apiInput = await parseAndValidateApiInput(ctx, GetPagesInputValidator);
 
-  const pagesRes = await ctx.var.db.query('SELECT * FROM pages WHERE blog_id = $1', [apiInput.blog_id]);
+  const pagesRes = await ctx.var.db.query('SELECT * FROM pages WHERE blog_id = $1 ORDER BY id DESC',
+    [apiInput.blog_id],
+  );
   const pages: Page[] = pagesRes.rows;
 
   return ctx.json(convertToApiResponse(pages));
