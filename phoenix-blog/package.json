@@ -4,9 +4,10 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "templates": "npx handlebars src/templates/*.handlebars -f src/templates/precompiled.js -c handlebars/runtime -m",
+        "templates": "handlebars src/templates/*.handlebars -f src/templates/precompiled.js -c handlebars/runtime -m",
         "deploy": "wrangler deploy",
-        "dev": "wrangler dev"
+        "dev": "wrangler dev",
+        "css": "tailwindcss -i src/index.css -o src/public/theme/index.css --minify"
     },
     "repository": {
         "type": "git",
@@ -15,5 +16,8 @@
     "dependencies": {
         "handlebars": "^4.7.8",
         "hono": "^3.8.3"
+    },
+    "devDependencies": {
+        "tailwindcss": "^3.3.5"
     }
 }

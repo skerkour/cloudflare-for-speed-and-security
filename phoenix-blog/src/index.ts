@@ -2,6 +2,9 @@ import { Hono } from 'hono';
 import { etagMiddleware } from '@phoenix/core/middlewares';
 import Handlebars from './templates';
 import robotsTxt from './public/robots.txt';
+import indexCss from './public/theme/index.css';
+import { ApiResponse } from '@phoenix/core/api';
+import { Page } from '@phoenix/core/entities';
 
 type Bindings = {
   api: Fetcher;
@@ -23,11 +26,11 @@ app.get('/', async (ctx) => {
   // service bindings expects a request with a full URL, se we set an invalid host
   const apiReq = new Request('https://localhost/headless/posts', ctx.req.raw);
   const apiRes = await ctx.env.api.fetch(apiReq);
-  const posts = await apiRes.json();
+  const posts: ApiResponse<Page[]> = await apiRes.json();
 
   const html = Handlebars.templates['posts']({
     path: ctx.req.path,
-    posts: posts,
+    posts: posts.data,
   });
 
   return ctx.html(html);
@@ -35,6 +38,14 @@ app.get('/', async (ctx) => {
 
 app.get('/robots.txt', async (ctx) => {
   return ctx.text(robotsTxt);
+})
+
+app.get('/theme/index.css', async (ctx) => {
+  return new Response(indexCss, {
+    headers: {
+      'Content-Type': 'text/css; charset=utf-8',
+    },
+  })
 })
 
 app.get('*', async (ctx) => {

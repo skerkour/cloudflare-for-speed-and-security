@@ -1,5 +1,5 @@
 import { MiddlewareHandler } from "hono";
-import { uuidv7 } from "@phoenix/uuiv7";
+import { uuidv7 } from "@phoenix/uuidv7";
 
 export function requestIdMiddleware(): MiddlewareHandler {
   return async (ctx, next) => {

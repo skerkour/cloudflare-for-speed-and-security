@@ -1,7 +1,19 @@
 {{#> base }}
-    <ul>
     {{#each posts}}
-        <li>{{this}}</li>
+        <article class="flex max-w-xl flex-col items-start justify-between">
+            <a href="#{{this}}">
+                <div class="group relative">
+                    <h3 class="mt-3 text-lg leading-6 text-gray-900 group-hover:text-gray-600">
+                        {{this}}
+                    </h3>
+                    <time datetime="2020-03-16" class="text-gray-500 text-xs font-medium">
+                        Mar 16, 2020
+                    </time>
+                    <p class="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">
+                        Illo sint voluptas. Error voluptates culpa eligendi. Hic vel totam vitae illo. Non aliquid explicabo necessitatibus unde. Sed exercitationem placeat consectetur nulla deserunt vel iusto corrupti dicta laboris incididunt.
+                    </p>
+                </div>
+            </a>
+        </article>
     {{/each}}
-    </ul>
 {{/base}}

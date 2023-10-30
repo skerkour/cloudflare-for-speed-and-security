@@ -1,5 +1,5 @@
 import { bufferToBase64, hashPassword, parseAndValidateApiInput } from "../utils";
-import { uuidv7 } from "@phoenix/uuiv7";
+import { uuidv7 } from "@phoenix/uuidv7";
 import { InternalServerError, PermissionDeniedError } from "../errors";
 import { User } from "@phoenix/core/entities";
 import { SignupInputValidator, convertToApiResponse, convertUser } from "@phoenix/core/api";

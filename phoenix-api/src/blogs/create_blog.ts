@@ -1,4 +1,4 @@
-import { uuidv7 } from "@phoenix/uuiv7";
+import { uuidv7 } from "@phoenix/uuidv7";
 import { checkAuth, checkIsAdmin, parseAndValidateApiInput } from "../utils";
 import { CreateBlogInputValidator, convertToApiResponse } from "@phoenix/core/api";
 import { Blog } from "@phoenix/core/entities";

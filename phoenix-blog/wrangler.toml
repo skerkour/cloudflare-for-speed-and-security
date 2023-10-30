@@ -6,6 +6,13 @@ services = [
   { binding = "api", service = "phoenix-api" }
 ]
 
+# See https://developers.cloudflare.com/workers/wrangler/bundling/
+# and https://developers.cloudflare.com/workers/wrangler/configuration/#bundling
+rules = [
+  { type = "Text", globs = ["**/*.css"], fallthrough = true }
+]
+
+
 [[r2_buckets]]
 binding = "phoenix_storage"
 bucket_name = "phoenix"
