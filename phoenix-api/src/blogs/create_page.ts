@@ -1,5 +1,5 @@
 import { checkAuth, parseAndValidateApiInput } from "../utils";
-import { NotFoundError } from "../errors";
+import { NotFoundError } from "@phoenix/core/errors";
 import { uuidv7 } from "@phoenix/uuidv7";
 import { checkIsAdmin } from "../utils";
 import { CreatePageInputValidator, convertToApiResponse } from "@phoenix/core/api";

@@ -5,6 +5,7 @@ import { Context as HonoContext } from "hono";
 export type Bindings = {
   DATABASE_URL: string;
   JWT_SECRET: string;
+  BLOGS_ROOT_DOMAIN: string;
 };
 
 export type Variables = {

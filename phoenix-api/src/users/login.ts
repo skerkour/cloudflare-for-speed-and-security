@@ -1,7 +1,7 @@
 import { setCookie } from "hono/cookie";
 import { Context } from "../hono_bindings";
 import jwt from "@phoenix/jwt";
-import { NotFoundError, PermissionDeniedError } from "../errors";
+import { NotFoundError, PermissionDeniedError } from "@phoenix/core/errors";
 import { base64ToBuffer, hashPassword, parseAndValidateApiInput } from "../utils";
 import { LoginInputValidator, convertToApiResponse, convertUser } from "@phoenix/core/api";
 import { User } from "@phoenix/core/entities";

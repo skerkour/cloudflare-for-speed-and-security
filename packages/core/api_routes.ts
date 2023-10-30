@@ -15,5 +15,6 @@ export enum Routes {
   UpdatePage = '/update_page',
 
   HeadlessPosts = '/headless/posts',
-  HeadlessPage = '/headless/page'
+  HeadlessPage = '/headless/page',
+  HeadlessBlog = '/headless/blog',
 }

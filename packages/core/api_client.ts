@@ -21,6 +21,24 @@ export class ApiClient {
     this.apiBaseUrl = apiBaseUrl;
   }
 
+  async get(route: string, data?: any): Promise<any> {
+    let url = `${this.apiBaseUrl}${route}`;
+    let response: any = null;
+    if (data) {
+      url += '?' + new URLSearchParams(data).toString();
+    }
+
+    try {
+      response = await fetch(url);
+    } catch (err: any) {
+      throw new Error(networkErrorMessage);
+    }
+
+    const responseData = await this.unwrapApiResponse(response);
+
+    return responseData;
+  }
+
   async post(route: string, data?: any): Promise<any> {
     const url = `${this.apiBaseUrl}${route}`;
     data = data ?? {};
@@ -145,4 +163,23 @@ export async function updatePage(client: ApiClient, input: UpdatePageInput): Pro
 
 export async function deletePage(client: ApiClient, input: DeletePageInput) {
   await client.post(Routes.DeletePage, input);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Pages
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export async function headlessGetBlog(client: ApiClient, domain: string): Promise<Blog> {
+  const blog: Blog = await client.get(Routes.HeadlessBlog, { domain });
+  return blog;
+}
+
+export async function headlessGetPage(client: ApiClient, domain: string, slug: string): Promise<Page> {
+  const page: Page = await client.get(Routes.HeadlessPage, { domain, slug });
+  return page;
+}
+
+export async function headlessGetPosts(client: ApiClient, domain: string): Promise<Page[]> {
+  const page: Page[] = await client.get(Routes.HeadlessPosts, { domain });
+  return page;
 }

@@ -1,6 +1,6 @@
 import { Context } from "./hono_bindings";
 import { getCookie } from "hono/cookie";
-import { InvalidArgumentError, NotFoundError, PermissionDeniedError } from "./errors";
+import { InvalidArgumentError, NotFoundError, PermissionDeniedError } from "@phoenix/core/errors";
 import jwt from "@phoenix/jwt";
 import { Pool } from "@neondatabase/serverless";
 import { ZodSchema } from "zod";

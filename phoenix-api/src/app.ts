@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
 import { Pool, neonConfig } from '@neondatabase/serverless';
-import { ErrorCode, NotFoundError, PermissionDeniedError, formatZodError } from './errors';
+import { ErrorCode, NotFoundError, PermissionDeniedError, formatZodError } from '@phoenix/core/errors';
 import { ApiError, ApiResponse, Routes } from '@phoenix/core/api';
 import { requestIdMiddleware } from '@phoenix/core/middlewares';
 import { Bindings, Variables } from './hono_bindings';
@@ -8,6 +8,7 @@ import { ZodError } from 'zod';
 import { createPage } from './blogs/create_page';
 import { headlessGetPosts } from './blogs/headless_get_posts';
 import { headlessGetPage } from './blogs/headless_get_page';
+import { headlessGetBlog } from './blogs/headless_get_blog';
 import { getPages } from './blogs/get_pages';
 import { getPage } from './blogs/get_page';
 import { deletePage } from './blogs/delete_page';
@@ -59,6 +60,7 @@ app.post(Routes.UpdatePage, updatePage);
 // headless API
 app.get(Routes.HeadlessPosts, headlessGetPosts);
 app.get(Routes.HeadlessPage, headlessGetPage);
+app.get(Routes.HeadlessBlog, headlessGetBlog);
 
 
 app.onError((err, ctx) => {

@@ -1,6 +1,6 @@
 import { Context } from "../hono_bindings";
 import { checkAuth, checkIsAdmin, parseAndValidateApiInput } from "../utils";
-import { NotFoundError } from "../errors";
+import { NotFoundError } from "@phoenix/core/errors";
 import { UpdatePageInputValidator, convertToApiResponse } from "@phoenix/core/api";
 import { Page } from "@phoenix/core/entities";
 
