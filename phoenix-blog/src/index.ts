@@ -80,6 +80,8 @@ app.onError((err, ctx) => {
     error: errorMessage,
   });
 
+  ctx.res.headers.set('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+
   return ctx.html(html);
 });
 

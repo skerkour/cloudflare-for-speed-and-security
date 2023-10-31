@@ -1,13 +1,9 @@
 <template>
   <div class="h-full">
-    <div v-if="$store.isAuthenticated">
+    <div v-if="$store.isAuthenticated" class="h-full">
       <Sidebar />
-      <main>
-        <div class="pl-64">
-          <div class="px-4 py-6">
-            <RouterView />
-          </div>
-        </div>
+      <main class="h-full pl-64 mx-4 my-6">
+        <RouterView />
       </main>
     </div>
     <div v-else>

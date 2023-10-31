@@ -1,5 +1,5 @@
 <template>
-  <div class="felx flex-col">
+  <div class="flex flex-col h-full">
     <div class="flex flex-row justify-between items-center">
       <div class="flex items-center">
         <div class="flex">
@@ -91,8 +91,8 @@
     </div>
 
       <div class="flex mt-5 w-full">
-          <textarea v-model="contentHtml" name="contentHtml" id="contentHtml" placeholder="What are you thinking about today?" rows="30"
-            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+          <Editor v-model="contentHtml" name="contentHtml" id="contentHtml" placeholder="What are you thinking about today?" rows="30"
+          />
       </div>
 
 
@@ -111,6 +111,7 @@ import { PageType, type Page } from '@phoenix/core/entities';
 import { useApiClient } from '@/app/api_client';
 import * as api from '@phoenix/core/api';
 import SelectPageType from '@/components/select_page_type.vue';
+import Editor from '@/components/editor.vue';
 
 // props
 const props = defineProps({
