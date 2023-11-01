@@ -6,7 +6,7 @@ import { date } from '../utils';
 export const PostsTemplate: FC<{ posts: Page[], blog: Blog }> = (props: { posts: Page[], blog: Blog }) => {
     return (
         <Base blog={props.blog}>
-            {props.posts.map((post) => { return (
+            {props.posts.map((post) => (
                 <article class="flex max-w-xl flex-col items-start justify-between">
                     <a href={post.slug}>
                         <div class="group relative">
@@ -19,7 +19,7 @@ export const PostsTemplate: FC<{ posts: Page[], blog: Blog }> = (props: { posts:
                         </div>
                     </a>
                 </article>
-            )})}
+            ))}
         </Base>
     );
 }
