@@ -1,4 +1,3 @@
-import { Blog, Page } from '@phoenix/core/entities';
 import type { FC } from 'hono/jsx';
 import { Base } from './base';
 

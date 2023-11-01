@@ -1,5 +1,5 @@
 import type { FC } from 'hono/jsx';
-import { html, raw } from 'hono/html';
+import { raw } from 'hono/html';
 
 export const Base: FC = (props) => {
     const base = (props: any) => (
@@ -37,7 +37,5 @@ export const Base: FC = (props) => {
         </html>
     );
 
-    return html`<!DOCTYPE html>
-        ${raw(base(props))}
-    `
+    return raw(`<!DOCTYPE html>${base(props)}`);
 }
