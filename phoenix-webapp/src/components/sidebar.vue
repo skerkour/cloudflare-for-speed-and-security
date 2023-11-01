@@ -57,6 +57,7 @@ import {
   Cog6ToothIcon,
   HomeIcon,
   DocumentIcon,
+  PhotoIcon,
 } from '@heroicons/vue/24/outline';
 import {
   Menu,
@@ -100,6 +101,7 @@ function setNav() {
     navigation.value = [
       { name: 'Home', to: `/`, icon: HomeIcon, current: false },
       { name: 'Pages', to: `/blogs/${blogId}/pages`, icon: DocumentIcon, current: false },
+      { name: 'Assets', to: `/blogs/${blogId}/assets`, icon: PhotoIcon, current: false },
       { name: 'Settings', to: `/blogs/${blogId}/settings`, icon: Cog6ToothIcon, current: false },
     ];
   } else {

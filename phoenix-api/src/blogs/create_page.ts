@@ -36,5 +36,7 @@ export async function createPage(ctx: Context): Promise<Response> {
     [page.id, page.created_at, page.updated_at, page.slug, page.type, page.title, page.content_html, page.blog_id],
   );
 
+  await ctx.var.db.query(`UPDATE blogs SET updated_at = $1 WHERE id = $2`, [now, blog.id]);
+
   return ctx.json(convertToApiResponse(page));
 }

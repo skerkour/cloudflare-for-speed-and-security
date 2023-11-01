@@ -18,13 +18,13 @@ export async function createBlog(ctx: Context): Promise<Response> {
     name: apiInput.name,
     slug: apiInput.slug,
     navigation: {},
-    description: '',
+    description_html: '',
   };
 
   await ctx.var.db.query(`INSERT INTO blogs
-    (id, created_at, updated_at, name, slug, navigation, description)
+    (id, created_at, updated_at, name, slug, navigation, description_html)
     VALUES($1, $2, $3, $4, $5, $6, $7)`,
-    [blog.id, blog.created_at, blog.updated_at, blog.name, blog.slug, blog.navigation, blog.description],
+    [blog.id, blog.created_at, blog.updated_at, blog.name, blog.slug, blog.navigation, blog.description_html],
   );
 
   return ctx.json(convertToApiResponse(blog));

@@ -2,7 +2,22 @@ name = "phoenix-api"
 main = "src/app.ts"
 compatibility_date = "2023-09-18"
 
+
+
+vars = []
+
+
+r2_buckets = [
+  { binding = "r2", bucket_name = "phoenix-dev" }
+]
+
 [placement]
 mode = "smart"
 
-[vars]
+
+
+[env.production]
+
+r2_buckets = [
+  { binding = "r2", bucket_name = "phoenix" }
+]

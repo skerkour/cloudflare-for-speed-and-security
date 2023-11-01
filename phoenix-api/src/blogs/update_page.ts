@@ -16,7 +16,8 @@ export async function updatePage(ctx: Context): Promise<Response> {
   }
   const page: Page = pageRes.rows[0];
 
-  page.updated_at = new Date();
+  const now = new Date();
+  page.updated_at = now;
   page.slug = apiInput.slug ?? page.slug;
   page.title = apiInput.title ?? page.title;
   page.content_html = apiInput.content_html ?? page.content_html;
@@ -26,6 +27,7 @@ export async function updatePage(ctx: Context): Promise<Response> {
     WHERE id = $5`,
     [page.updated_at, page.slug, page.title, page.content_html, page.id],
   );
+  await ctx.var.db.query(`UPDATE blogs SET updated_at = $1 WHERE id = $2`, [now, page.blog_id]);
 
   return ctx.json(convertToApiResponse(page));
 }

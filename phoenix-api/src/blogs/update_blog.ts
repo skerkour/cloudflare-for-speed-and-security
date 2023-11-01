@@ -20,12 +20,12 @@ export async function updateBlog(ctx: Context): Promise<Response> {
   blog.slug = apiInput.slug ?? blog.slug;
   blog.name = apiInput.name ?? blog.name;
   blog.navigation = apiInput.navigation ?? blog.navigation;
-  blog.description = apiInput.description ?? blog.description;
+  blog.description_html = apiInput.description_html ?? blog.description_html;
 
   await ctx.var.db.query(`UPDATE blogs SET
-    updated_at = $1, slug = $2, name = $3, navigation = $4, description = $5
+    updated_at = $1, slug = $2, name = $3, navigation = $4, description_html = $5
     WHERE id = $6`,
-    [blog.updated_at, blog.slug, blog.name, blog.navigation, blog.description, blog.id],
+    [blog.updated_at, blog.slug, blog.name, blog.navigation, blog.description_html, blog.id],
   );
 
   return ctx.json(convertToApiResponse(blog));

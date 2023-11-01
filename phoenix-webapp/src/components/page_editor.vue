@@ -91,8 +91,12 @@
     </div>
 
       <div class="flex mt-5 w-full">
-          <Editor v-model="contentHtml" name="contentHtml" id="contentHtml" placeholder="What are you thinking about today?" rows="30"
-          />
+        <CfButton>
+          Upload image
+        </CfButton>
+        <HtmlEditor v-model="contentHtml" name="contentHtml" id="contentHtml"
+          placeholder="What are you thinking about today?"
+        />
       </div>
 
 
@@ -111,7 +115,7 @@ import { PageType, type Page } from '@phoenix/core/entities';
 import { useApiClient } from '@/app/api_client';
 import * as api from '@phoenix/core/api';
 import SelectPageType from '@/components/select_page_type.vue';
-import Editor from '@/components/editor.vue';
+import HtmlEditor from '@/components/html_editor.vue';
 
 // props
 const props = defineProps({

@@ -18,7 +18,7 @@ CREATE TABLE blogs (
     name TEXT NOT NULL,
     slug TEXT NOT NULL UNIQUE,
     navigation JSONB NOT NULL,
-    description TEXT NOT NULL
+    description_html TEXT NOT NULL
 );
 CREATE UNIQUE INDEX index_blogs_on_slug ON blogs (slug);
 

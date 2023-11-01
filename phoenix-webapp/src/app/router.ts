@@ -9,6 +9,7 @@ import BlogSettings from '@/pages/blogs/settings.vue'
 import Pages from '@/pages/blogs/pages/pages.vue'
 import NewPage from '@/pages/blogs/pages/new.vue'
 import Page from '@/pages/blogs/pages/page.vue'
+import Assets from '@/pages/blogs/assets.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,7 +21,7 @@ const router = createRouter({
     { path: '/blogs/new', component: NewBlog },
     { path: '/blogs/:blog_id', redirect: (to) => `/blogs/${to.params.blog_id}/pages` },
     { path: '/blogs/:blog_id/settings', component: BlogSettings },
-
+    { path: '/blogs/:blog_id/assets', component: Assets },
     { path: '/blogs/:blog_id/pages', component: Pages },
     { path: '/blogs/:blog_id/pages/new', component: NewPage },
     { path: '/blogs/:blog_id/pages/:page_id', component: Page },
