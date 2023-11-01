@@ -1,7 +1,8 @@
 import type { FC } from 'hono/jsx';
+import { html, raw } from 'hono/html';
 
 export const Base: FC = (props) => {
-    return (
+    const base = (props: any) => (
         <html>
             <head>
                 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -35,4 +36,8 @@ export const Base: FC = (props) => {
             </body>
         </html>
     );
+
+    return html`<!DOCTYPE html>
+        ${raw(base(props))}
+    `
 }
