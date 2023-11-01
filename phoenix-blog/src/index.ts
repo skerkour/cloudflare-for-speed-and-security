@@ -6,7 +6,7 @@ import favicon from './public/favicon.ico';
 import { Bindings, Variables, getBlog, getPage, getPosts, handleCaching } from './utils';
 import { NotFoundError } from '@phoenix/core/errors';
 import { sha256Sum } from '@phoenix/core/crypto';
-import { Jsx } from './pages/jsx';
+import { JsxPage } from './pages/jsx';
 
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>();
 
@@ -40,13 +40,14 @@ app.get('/favicon.ico', async (ctx) => {
 })
 
 app.get('/jsx', async (ctx) => {
-  const etag = await sha256Sum('/jsx');
+  const res = JsxPage({ name: 'JSX' });
+
+  const etag = await sha256Sum(res);
   const cacheHit = handleCaching(ctx, 'public, no-cache, must-revalidate', etag);
   if (cacheHit) {
     return cacheHit;
   }
 
-  const res = Jsx({ name: 'JSX' });
   return ctx.html(res);
 })
 
