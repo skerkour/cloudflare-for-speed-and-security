@@ -4,13 +4,13 @@ name: deploy
 # CLOUDFLARE_ACCOUNT_ID: Your Cloudflare account ID
 # CLOUDFLARE_API_TOKEN: Your API Token generated
 
-on: workflow_dispatch
+# on: workflow_dispatch
 
 # In a real-world scenario you may want to trigger the workflow when pushing on your production branch
-# on:
-#   push:
-#     branches:
-#       - main
+on:
+  push:
+    branches:
+      - main
 
 jobs:
 
@@ -22,6 +22,10 @@ jobs:
       - name: Install Dependencies
         run: |
           make install_ci
+
+      - name: Run Tests
+        run: |
+          make test
 
       - name: Deploy
         env:

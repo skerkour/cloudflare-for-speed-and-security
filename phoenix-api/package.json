@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "deploy": "wrangler deploy",
-    "dev": "wrangler dev"
+    "dev": "wrangler dev",
+    "test": "tsc --noEmit"
   },
   "repository": {
     "type": "git",

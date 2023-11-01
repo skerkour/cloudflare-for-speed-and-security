@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --noEmit -p tsconfig.app.json --composite false",
-    "deploy": "npm run build && wrangler pages deploy --project-name phoenix-webapp ./dist"
+    "deploy": "npm run build && wrangler pages deploy --project-name phoenix-webapp ./dist",
+    "test": "vue-tsc --noEmit -p tsconfig.app.json --composite false"
   },
   "dependencies": {
     "@headlessui/vue": "^1.7.16",
