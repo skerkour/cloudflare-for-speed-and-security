@@ -3,7 +3,7 @@ import Handlebars from './templates';
 import robotsTxt from './public/robots.txt';
 import indexCss from './public/theme/index.css';
 import favicon from './public/favicon.ico';
-import { Bindings, Variables, getBlog, getPage, getPosts, handleCaching } from './utils';
+import { Bindings, Variables, getBlog, getPage, getPosts, handleCaching, maxTime } from './utils';
 import { NotFoundError } from '@phoenix/core/errors';
 import { sha256Sum } from '@phoenix/core/crypto';
 import { PageTemplate } from './pages/page';
@@ -105,12 +105,14 @@ app.get('*', async (ctx) => {
     getPage(ctx, domain, reqUrl.pathname),
   ]);
 
-  const html = PageTemplate({ blog: res[0], page: res[1] });
-  const etag = await sha256Sum(html);
+  const updatedAt = maxTime(res[0].updated_at, res[1].updated_at);
+  const etag = btoa(updatedAt.toISOString());
   const cacheHit = handleCaching(ctx, 'public, no-cache, must-revalidate', etag);
   if (cacheHit) {
     return cacheHit;
   }
+
+  const html = PageTemplate({ blog: res[0], page: res[1] });
 
   return ctx.html(html);
 })

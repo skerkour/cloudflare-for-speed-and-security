@@ -27,7 +27,6 @@ export async function updatePage(ctx: Context): Promise<Response> {
     WHERE id = $5`,
     [page.updated_at, page.slug, page.title, page.content_html, page.id],
   );
-  await ctx.var.db.query(`UPDATE blogs SET updated_at = $1 WHERE id = $2`, [now, page.blog_id]);
 
   return ctx.json(convertToApiResponse(page));
 }
