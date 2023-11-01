@@ -7,7 +7,7 @@ import { Bindings, Variables, getBlog, getPage, getPosts, handleCaching } from '
 import { NotFoundError } from '@phoenix/core/errors';
 import { sha256Sum } from '@phoenix/core/crypto';
 import { PageTemplate } from './pages/page';
-import { ErrorTempalte } from './pages/error';
+import { ErrorTemplate } from './pages/error';
 import { PostsTemplate } from './pages/posts';
 
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>();
@@ -128,7 +128,7 @@ app.onError((err, ctx) => {
 
   ctx.res.headers.set('Cache-Control', 'private, no-cache, no-store, must-revalidate');
 
-  const html = ErrorTempalte({ error: errorMessage });
+  const html = ErrorTemplate({ error: errorMessage });
 
   return ctx.html(html, statusCode);
 });
