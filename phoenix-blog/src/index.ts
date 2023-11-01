@@ -1,5 +1,4 @@
 import { Hono } from 'hono';
-import { etagMiddleware } from '@phoenix/core/middlewares';
 import Handlebars from './templates';
 import robotsTxt from './public/robots.txt';
 import indexCss from './public/theme/index.css';
@@ -7,6 +6,7 @@ import favicon from './public/favicon.ico';
 import { Bindings, Variables, getBlog, getPage, getPosts, handleCaching } from './utils';
 import { NotFoundError } from '@phoenix/core/errors';
 import { sha256Sum } from '@phoenix/core/crypto';
+import { Jsx } from './pages/jsx';
 
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>();
 
@@ -37,6 +37,17 @@ app.get('/favicon.ico', async (ctx) => {
       'Content-Type': 'image/x-icon',
     },
   })
+})
+
+app.get('/jsx', async (ctx) => {
+  const etag = await sha256Sum('/jsx');
+  const cacheHit = handleCaching(ctx, 'public, no-cache, must-revalidate', etag);
+  if (cacheHit) {
+    return cacheHit;
+  }
+
+  const res = Jsx({ name: 'JSX' });
+  return ctx.html(res);
 })
 
 app.get('/theme/index.css', async (ctx) => {
