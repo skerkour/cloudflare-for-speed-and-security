@@ -14,24 +14,21 @@
         <title>{{ blog.name }}{{#if page}} - {{ page.title }} {{/if}}</title>
     </head>
     <body>
-        <div class="bg-white py-12">
-            <div class="mx-auto max-w-7xl px-6 lg:px-8">
-                <div class="mx-auto max-w-2xl">
-                    <a href="/">
-                        <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                            {{ blog.name }}
-                        </h2>
-                    </a>
-                    <p class="mt-2 text-lg leading-8 text-gray-600">
-                        {{{ blog.description_html }}}
-                    </p>
-                    <div class="mt-10 space-y-8 border-t border-gray-200 pt-10 sm:mt-8 sm:pt-8">
-                        {{> @partial-block }}
+            <div class="bg-white py-12">
+                <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                    <div class="mx-auto max-w-2xl">
+                        <p class="mt-2 text-lg leading-8">
+                        <div class="flex text-blue-500">
+                            <a href="/">Back To Home</a>
+                        </div>
+                        </p>
+                        <div class="mt-10 space-y-8 border-t border-gray-200 pt-10 sm:mt-8 sm:pt-8">
+                          {{> @partial-block }}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </body>
+        </body>
 </html>
 
 

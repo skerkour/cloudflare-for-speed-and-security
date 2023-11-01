@@ -6,7 +6,9 @@ import favicon from './public/favicon.ico';
 import { Bindings, Variables, getBlog, getPage, getPosts, handleCaching } from './utils';
 import { NotFoundError } from '@phoenix/core/errors';
 import { sha256Sum } from '@phoenix/core/crypto';
-import { JsxPage } from './pages/jsx';
+import { PageTemplate } from './pages/page';
+import { ErrorTempalte } from './pages/error';
+import { PostsTemplate } from './pages/posts';
 
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>();
 
@@ -39,16 +41,20 @@ app.get('/favicon.ico', async (ctx) => {
   })
 })
 
-app.get('/jsx', async (ctx) => {
-  const res = JsxPage({ name: 'JSX' });
+app.get('/handlebars', async (ctx) => {
+  const name = ctx.req.query('name') ?? 'Handlebars'
 
-  const etag = await sha256Sum(res);
+  const html = Handlebars.templates['handlebars']({
+    name,
+  });
+
+  const etag = await sha256Sum(html);
   const cacheHit = handleCaching(ctx, 'public, no-cache, must-revalidate', etag);
   if (cacheHit) {
     return cacheHit;
   }
 
-  return ctx.html(res);
+  return ctx.html(html);
 })
 
 app.get('/theme/index.css', async (ctx) => {
@@ -73,17 +79,12 @@ app.get('/', async (ctx) => {
     getPosts(ctx, domain),
   ]);
 
-  const etag = btoa(res[0].updated_at.toISOString());
+  const html = PostsTemplate({ blog: res[0], posts: res[1] });
+  const etag = await sha256Sum(html);
   const cacheHit = handleCaching(ctx, 'public, no-cache, must-revalidate', etag);
   if (cacheHit) {
     return cacheHit;
   }
-
-  const html = Handlebars.templates['posts']({
-    path: ctx.req.path,
-    blog: res[0],
-    posts: res[1],
-  });
 
   return ctx.html(html);
 });
@@ -97,16 +98,12 @@ app.get('*', async (ctx) => {
     getPage(ctx, domain, reqUrl.pathname),
   ]);
 
-  const etag = btoa(res[0].updated_at.toISOString());
+  const html = PageTemplate({ blog: res[0], page: res[1] });
+  const etag = await sha256Sum(html);
   const cacheHit = handleCaching(ctx, 'public, no-cache, must-revalidate', etag);
   if (cacheHit) {
     return cacheHit;
   }
-
-  const html = Handlebars.templates['page']({
-    blog: res[0],
-    page: res[1],
-  });
 
   return ctx.html(html);
 })
@@ -122,11 +119,9 @@ app.onError((err, ctx) => {
     console.error(err);
   }
 
-  const html = Handlebars.templates['error']({
-    error: errorMessage,
-  });
-
   ctx.res.headers.set('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+
+  const html = ErrorTempalte({ error: errorMessage });
 
   return ctx.html(html, statusCode);
 });

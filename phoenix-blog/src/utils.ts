@@ -97,3 +97,11 @@ export function maxTime(...times: Date[]): Date {
 
   return max;
 }
+
+export function date(val: Date | undefined) {
+  if (!val) {
+    return val;
+  }
+  const date = new Date(val);
+  return `${date.getFullYear()}-${date.getMonth()}-${date.getDay()}`;
+}
