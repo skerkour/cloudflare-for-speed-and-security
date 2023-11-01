@@ -27,9 +27,12 @@ app.get('/robots.txt', async (ctx) => {
   return ctx.text(robotsTxt);
 })
 
+let faviconEtag: string | null = null;
 app.get('/favicon.ico', async (ctx) => {
-  const etag = await sha256Sum('/favicon.ico');
-  const cacheHit = handleCaching(ctx, 'public, max-age=31536000, immutable', etag);
+  if (!faviconEtag) {
+    faviconEtag = await sha256Sum('/favicon.ico');
+  }
+  const cacheHit = handleCaching(ctx, 'public, max-age=31536000, immutable', faviconEtag);
   if (cacheHit) {
     return cacheHit;
   }
@@ -57,9 +60,12 @@ app.get('/handlebars', async (ctx) => {
   return ctx.html(html);
 })
 
+let indexCssEtag: string | null = null;
 app.get('/theme/index.css', async (ctx) => {
-  const etag = await sha256Sum(indexCss);
-  const cacheHit = handleCaching(ctx, 'public, no-cache, must-revalidate', etag);
+  if (!indexCssEtag) {
+    indexCssEtag = await sha256Sum(indexCss);
+  }
+  const cacheHit = handleCaching(ctx, 'public, no-cache, must-revalidate', indexCssEtag);
   if (cacheHit) {
     return cacheHit;
   }
