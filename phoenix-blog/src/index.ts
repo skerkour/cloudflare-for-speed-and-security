@@ -3,24 +3,49 @@ import { etagMiddleware } from '@phoenix/core/middlewares';
 import Handlebars from './templates';
 import robotsTxt from './public/robots.txt';
 import indexCss from './public/theme/index.css';
-import { ApiClient, ApiResponse, headlessGetPosts } from '@phoenix/core/api';
-import { Page } from '@phoenix/core/entities';
-import { Bindings, Variables, getBlog, getPage, getPosts } from './utils';
+import favicon from './public/favicon.ico';
+import { Bindings, Variables, getBlog, getPage, getPosts, handleCaching } from './utils';
 import { NotFoundError } from '@phoenix/core/errors';
+import { sha256Sum } from '@phoenix/core/crypto';
 
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>();
 
-app.use('*', etagMiddleware());
 app.use('*', async (ctx, next) => {
-  await next();
   ctx.res.headers.set('X-Robots-Tag', 'noindex');
+  await next();
 })
 
 app.get('/robots.txt', async (ctx) => {
+  const etag = await sha256Sum(indexCss);
+  const cacheHit = handleCaching(ctx, 'public, max-age=1800, must-revalidate', etag);
+  if (cacheHit) {
+    return cacheHit;
+  }
+
   return ctx.text(robotsTxt);
 })
 
+app.get('/favicon.ico', async (ctx) => {
+  const etag = await sha256Sum('/favicon.ico');
+  const cacheHit = handleCaching(ctx, 'public, max-age=31536000, immutable', etag);
+  if (cacheHit) {
+    return cacheHit;
+  }
+
+  return new Response(favicon, {
+    headers: {
+      'Content-Type': 'image/x-icon',
+    },
+  })
+})
+
 app.get('/theme/index.css', async (ctx) => {
+  const etag = await sha256Sum(indexCss);
+  const cacheHit = handleCaching(ctx, 'public, no-cache, must-revalidate', etag);
+  if (cacheHit) {
+    return cacheHit;
+  }
+
   return new Response(indexCss, {
     headers: {
       'Content-Type': 'text/css; charset=utf-8',
@@ -35,6 +60,12 @@ app.get('/', async (ctx) => {
     getBlog(ctx, domain),
     getPosts(ctx, domain),
   ]);
+
+  const etag = btoa(res[0].updated_at.toISOString());
+  const cacheHit = handleCaching(ctx, 'public, no-cache, must-revalidate', etag);
+  if (cacheHit) {
+    return cacheHit;
+  }
 
   const html = Handlebars.templates['posts']({
     path: ctx.req.path,
@@ -54,8 +85,11 @@ app.get('*', async (ctx) => {
     getPage(ctx, domain, reqUrl.pathname),
   ]);
 
-  ctx.res.headers.set('Cache-Control', 'public, no-cache, must-revalidate');
-  // c.res.headers.set('ETag', '"123"');
+  const etag = btoa(res[0].updated_at.toISOString());
+  const cacheHit = handleCaching(ctx, 'public, no-cache, must-revalidate', etag);
+  if (cacheHit) {
+    return cacheHit;
+  }
 
   const html = Handlebars.templates['page']({
     blog: res[0],
@@ -82,7 +116,7 @@ app.onError((err, ctx) => {
 
   ctx.res.headers.set('Cache-Control', 'private, no-cache, no-store, must-revalidate');
 
-  return ctx.html(html);
+  return ctx.html(html, statusCode);
 });
 
 export default app;

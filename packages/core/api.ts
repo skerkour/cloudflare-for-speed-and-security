@@ -73,7 +73,7 @@ export const UpdateBlogInputValidator = z.object({
   blog_id: z.string(),
   slug: blogSlug.optional(),
   name: z.string().optional(),
-  description: z.string().optional(),
+  description_html: z.string().optional(),
   navigation: z.record(z.string()).optional(),
 }).strict();
 

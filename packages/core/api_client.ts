@@ -1,4 +1,4 @@
-import type { CreateBlogInput, CreatePageInput, DeleteBlogInput, DeletePageInput, GetBlogInput, GetPageInput, GetPagesInput, LoginInput, SignupInput, UpdatePageInput, UserApi } from "./api";
+import type { CreateBlogInput, CreatePageInput, DeleteBlogInput, DeletePageInput, GetBlogInput, GetPageInput, GetPagesInput, LoginInput, SignupInput, UpdateBlogInput, UpdatePageInput, UserApi } from "./api";
 import { Routes } from './api';
 import type { Blog, Page } from "./entities";
 
@@ -125,6 +125,11 @@ export async function getBlogs(client: ApiClient): Promise<Blog[]> {
 
 export async function createBlog(client: ApiClient, input: CreateBlogInput): Promise<Blog> {
   const blog: Blog = await client.post(Routes.CreateBlog, input);
+  return blog;
+}
+
+export async function updateBlog(client: ApiClient, input: UpdateBlogInput): Promise<Blog> {
+  const blog: Blog = await client.post(Routes.UpdateBlog, input);
   return blog;
 }
 

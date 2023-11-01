@@ -9,11 +9,12 @@
 
         <meta name="robots" content="noindex">
         <link href="/theme/index.css" rel="stylesheet">
+        <link rel="icon" type="image/x-icon" href="/favicon.ico">
 
         <title>{{ blog.name }}{{#if page}} - {{ page.title }} {{/if}}</title>
     </head>
     <body>
-        <div class="bg-white py-24">
+        <div class="bg-white py-12">
             <div class="mx-auto max-w-7xl px-6 lg:px-8">
                 <div class="mx-auto max-w-2xl">
                     <a href="/">
@@ -22,12 +23,10 @@
                         </h2>
                     </a>
                     <p class="mt-2 text-lg leading-8 text-gray-600">
-                        {{ blog.description }}
+                        {{{ blog.description_html }}}
                     </p>
-                    <div class="mt-10 space-y-16 border-t border-gray-200 pt-10 sm:mt-16 sm:pt-16">
-
+                    <div class="mt-10 space-y-8 border-t border-gray-200 pt-10 sm:mt-8 sm:pt-8">
                         {{> @partial-block }}
-
                     </div>
                 </div>
             </div>

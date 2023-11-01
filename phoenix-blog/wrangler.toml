@@ -9,7 +9,8 @@ services = [
 # See https://developers.cloudflare.com/workers/wrangler/bundling/
 # and https://developers.cloudflare.com/workers/wrangler/configuration/#bundling
 rules = [
-  { type = "Text", globs = ["**/*.css"], fallthrough = true }
+  { type = "Text", globs = ["**/*.css"], fallthrough = true },
+  { type = "Data", globs = ["**/*.ico"], fallthrough = true },
 ]
 
 
