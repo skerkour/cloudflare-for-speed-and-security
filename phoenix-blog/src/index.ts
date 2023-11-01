@@ -9,6 +9,7 @@ import { sha256Sum } from '@phoenix/core/crypto';
 import { PageTemplate } from './pages/page';
 import { ErrorTemplate } from './pages/error';
 import { PostsTemplate } from './pages/posts';
+import TsxSha256Hash from './tsx_sha256.txt';
 
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>();
 
@@ -106,7 +107,7 @@ app.get('*', async (ctx) => {
   ]);
 
   const updatedAt = maxTime(res[0].updated_at, res[1].updated_at);
-  const etag = btoa(updatedAt.toISOString());
+  const etag = await sha256Sum(`${TsxSha256Hash}|${updatedAt.toISOString()}`)
   const cacheHit = handleCaching(ctx, 'public, no-cache, must-revalidate', etag);
   if (cacheHit) {
     return cacheHit;
