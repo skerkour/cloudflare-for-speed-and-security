@@ -37,5 +37,6 @@ export const Base: FC = (props) => {
         </html>
     );
 
-    return raw(`<!DOCTYPE html>${base(props)}`);
+    return raw(`<!DOCTYPE html>
+${base(props)}`);
 }

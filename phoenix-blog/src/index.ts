@@ -17,9 +17,12 @@ app.use('*', async (ctx, next) => {
   await next();
 })
 
+let robotsTxtEtag: string | null = null;
 app.get('/robots.txt', async (ctx) => {
-  const etag = await sha256Sum(indexCss);
-  const cacheHit = handleCaching(ctx, 'public, max-age=1800, must-revalidate', etag);
+  if (!robotsTxtEtag) {
+    robotsTxtEtag = await sha256Sum(robotsTxt);
+  }
+  const cacheHit = handleCaching(ctx, 'public, max-age=1800, must-revalidate', robotsTxtEtag);
   if (cacheHit) {
     return cacheHit;
   }
@@ -44,22 +47,6 @@ app.get('/favicon.ico', async (ctx) => {
   })
 })
 
-app.get('/handlebars', async (ctx) => {
-  const name = ctx.req.query('name') ?? 'Handlebars'
-
-  const html = Handlebars.templates['handlebars']({
-    name,
-  });
-
-  const etag = await sha256Sum(html);
-  const cacheHit = handleCaching(ctx, 'public, no-cache, must-revalidate', etag);
-  if (cacheHit) {
-    return cacheHit;
-  }
-
-  return ctx.html(html);
-})
-
 let indexCssEtag: string | null = null;
 app.get('/theme/index.css', async (ctx) => {
   if (!indexCssEtag) {
@@ -75,6 +62,20 @@ app.get('/theme/index.css', async (ctx) => {
       'Content-Type': 'text/css; charset=utf-8',
     },
   })
+})
+
+app.get('/handlebars', async (ctx) => {
+  const name = ctx.req.query('name') ?? 'Handlebars'
+
+  const html = Handlebars.templates['handlebars']({ name });
+
+  const etag = await sha256Sum(html);
+  const cacheHit = handleCaching(ctx, 'public, no-cache, must-revalidate', etag);
+  if (cacheHit) {
+    return cacheHit;
+  }
+
+  return ctx.html(html);
 })
 
 app.get('/', async (ctx) => {
