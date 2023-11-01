@@ -90,13 +90,17 @@
       </div>
     </div>
 
-      <div class="flex mt-5 w-full">
-        <CfButton>
-          Upload image
-        </CfButton>
-        <HtmlEditor v-model="contentHtml" name="contentHtml" id="contentHtml"
-          placeholder="What are you thinking about today?"
-        />
+      <div class="flex flex-col mt-5 w-full">
+        <div class="flex">
+          <CfButton>
+            Upload image
+          </CfButton>
+        </div>
+        <div class="flex mt-4">
+          <HtmlEditor v-model="contentHtml" name="contentHtml" id="contentHtml"
+            placeholder="What are you thinking about today?"
+          />
+        </div>
       </div>
 
 
