@@ -1,5 +1,5 @@
 module.exports = {
-    content: ['./**/*.handlebars'],
+    content: ['**/*.{tsx,jsx,handlebars}'],
     theme: {
       extend: {
         colors: {},
