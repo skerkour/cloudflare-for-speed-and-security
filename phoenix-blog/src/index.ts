@@ -82,12 +82,12 @@ app.get('/handlebars', async (ctx) => {
 app.get('/', async (ctx) => {
   // const reqUrl = new URL(ctx.req.url);
   const domain = 'blog.cloudflarebook.net';
-  const res = await Promise.all([
+  const [blog, posts] = await Promise.all([
     getBlog(ctx, domain),
     getPosts(ctx, domain),
   ]);
 
-  const html = PostsTemplate({ blog: res[0], posts: res[1] });
+  const html = PostsTemplate({ blog, posts });
   const etag = await sha256Sum(html);
   const cacheHit = handleCaching(ctx, 'public, no-cache, must-revalidate', etag);
   if (cacheHit) {
@@ -101,19 +101,19 @@ app.get('*', async (ctx) => {
   const reqUrl = new URL(ctx.req.url);
 
   const domain = 'blog.cloudflarebook.net';
-  const res = await Promise.all([
+  const [blog, page] = await Promise.all([
     getBlog(ctx, domain),
     getPage(ctx, domain, reqUrl.pathname),
   ]);
 
-  const updatedAt = maxTime(res[0].updated_at, res[1].updated_at);
+  const updatedAt = maxTime(blog.updated_at, page.updated_at);
   const etag = await sha256Sum(`${TsxSha256Hash}|${updatedAt.toISOString()}`)
   const cacheHit = handleCaching(ctx, 'public, no-cache, must-revalidate', etag);
   if (cacheHit) {
     return cacheHit;
   }
 
-  const html = PageTemplate({ blog: res[0], page: res[1] });
+  const html = PageTemplate({ blog, page });
 
   return ctx.html(html);
 })
