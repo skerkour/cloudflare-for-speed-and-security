@@ -18,7 +18,6 @@ export async function deletePage(ctx: Context): Promise<Response> {
   const now = new Date();
 
   await ctx.var.db.query('DELETE FROM pages WHERE id = $1', [apiInput.page_id]);
-  await ctx.var.db.query(`UPDATE blogs SET updated_at = $1 WHERE id = $2`, [now, page.blog_id]);
 
   return ctx.json(convertToApiResponse({ ok: true }));
 }
