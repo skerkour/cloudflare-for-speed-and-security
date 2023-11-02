@@ -1,7 +1,11 @@
 import type { FC } from 'hono/jsx';
 import { Base } from './base';
 
-export const ErrorTemplate: FC<{ error: string }> = (props: { error: string }) => {
+type Props = {
+    error: string,
+}
+
+export const ErrorTemplate: FC<Props> = (props: Props) => {
     return (
         <Base>
             <div class="flex flex-col space-y-6">

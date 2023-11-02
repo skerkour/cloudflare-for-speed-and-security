@@ -1,8 +1,15 @@
 import type { FC } from 'hono/jsx';
 import { raw } from 'hono/html';
+import { Blog } from '@phoenix/core/entities';
 
-export const Base: FC = (props) => {
-    const base = (props: any) => (
+type Props = {
+    blog?: Blog,
+    children?: any,
+    title?: string;
+};
+
+export const Base: FC = (props: Props) => {
+    const base = (props: Props) => (
         <html>
             <head>
                 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -14,6 +21,8 @@ export const Base: FC = (props) => {
                 <meta name="robots" content="noindex" />
                 <link href="/theme/index.css" rel="stylesheet" />
                 <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+                <title>{ props.blog?.name }{ props.title ? `- ${props.title}` : ''}</title>
             </head>
             <body>
                 <div class="bg-white py-12">

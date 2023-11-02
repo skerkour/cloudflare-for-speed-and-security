@@ -3,7 +3,12 @@ import type { FC } from 'hono/jsx';
 import { Base } from './base';
 import { date } from '../utils';
 
-export const PostsTemplate: FC<{ posts: Page[], blog: Blog }> = (props: { posts: Page[], blog: Blog }) => {
+type Props = {
+    posts: Page[],
+    blog: Blog,
+}
+
+export const PostsTemplate: FC<Props> = (props: Props) => {
     return (
         <Base blog={props.blog}>
             {props.posts.map((post) => (

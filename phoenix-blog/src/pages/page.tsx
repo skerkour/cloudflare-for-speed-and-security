@@ -2,9 +2,14 @@ import { Blog, Page } from '@phoenix/core/entities';
 import type { FC } from 'hono/jsx';
 import { Base } from './base';
 
-export const PageTemplate: FC<{ page: Page, blog: Blog }> = (props: { page: Page, blog: Blog }) => {
+type Props = {
+    blog: Blog,
+    page: Page,
+}
+
+export const PageTemplate: FC<Props> = (props: Props) => {
     return (
-        <Base blog={props.blog}>
+        <Base blog={props.blog} title={props.page.title}>
             <div class="flex flex-col">
                 <div class="flex">
                     <h2 class="text-3xl font-bold">
