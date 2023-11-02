@@ -108,7 +108,7 @@ app.get('*', async (ctx) => {
 
   const updatedAt = maxTime(blog.updated_at, page.updated_at);
   const etag = await sha256Sum(`${TsxSha256Hash}|${updatedAt.toISOString()}`)
-  const cacheHit = handleCaching(ctx, 'public, no-cache, must-revalidate', etag);
+  const cacheHit = handleCaching(ctx, 'public, max-age=60, must-revalidate', etag);
   if (cacheHit) {
     return cacheHit;
   }
