@@ -16,7 +16,7 @@ export type Context = HonoContext<{Bindings: Bindings, Variables: Variables}>
 
 export function handleCaching(ctx: Context, cacheControl: string, etag: string): Response | null {
   ctx.res.headers.set('Cache-Control', cacheControl);
-  ctx.res.headers.set('Etag', `"${etag}"`);
+  ctx.res.headers.set('ETag', `"${etag}"`);
 
   const ifNoneMatch = ctx.req.header('If-None-Match')?.trim().replace('W/', '').replaceAll('"', '');
   if (ifNoneMatch && ifNoneMatch === etag) {
