@@ -7,7 +7,7 @@
         "templates": "handlebars src/templates/*.handlebars -f src/templates/precompiled.js -c handlebars/runtime -m && cat src/pages/*.tsx | shasum -a 256 | cut -d' ' -f1 > src/tsx_sha256.txt",
         "deploy": "wrangler deploy",
         "dev": "wrangler dev",
-        "css": "tailwindcss -i src/index.css -o src/public/theme/index.css --minify",
+        "css": "tailwindcss -i src/index.css -o src/public/theme/index-`git rev-parse HEAD`.css --minify",
         "test": "tsc --noEmit"
     },
     "repository": {

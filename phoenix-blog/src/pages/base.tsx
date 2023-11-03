@@ -19,7 +19,7 @@ export const Base: FC = (props: Props) => {
                 <meta name="referrer" content="no-referrer-when-downgrade" />
 
                 <meta name="robots" content="noindex" />
-                <link href="/theme/index.css" rel="stylesheet" />
+                <link href="/theme/index-5eca4c37898bca4ff1a357cf7c481dfe0375b737.css" rel="stylesheet" />
                 <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 
                 <title>{ props.blog?.name }{ props.title ? `- ${props.title}` : ''}</title>

@@ -1,18 +1,8 @@
 import { ApiError, ApiResponse } from "@phoenix/core/api";
 import { Blog, BlogValidator, Page, PageValidator } from "@phoenix/core/entities";
-import { Context as HonoContext } from "hono";
 import { InternalServerError, NotFoundError } from "@phoenix/core/errors";
-
-export type Bindings = {
-  api: Fetcher;
-  phoenix_storage: R2Bucket;
-};
-
-export type Variables = {
-};
-
-export type Context = HonoContext<{Bindings: Bindings, Variables: Variables}>
-
+import { sha256Sum } from "@phoenix/core/crypto";
+import { Context } from "./context";
 
 export function handleCaching(ctx: Context, cacheControl: string, etag: string): Response | null {
   ctx.res.headers.set('Cache-Control', cacheControl);
@@ -104,4 +94,13 @@ export function date(val: Date | undefined) {
   }
   const date = new Date(val);
   return `${date.getFullYear()}-${date.getMonth()}-${date.getDay()}`;
+}
+
+export async function getEtag(cache: Map<string, string>, path: string, content: string): Promise<string> {
+  let etag = cache.get(path);
+  if (!etag) {
+    etag = await sha256Sum(content);
+    cache.set(path, etag);
+  }
+  return etag;
 }

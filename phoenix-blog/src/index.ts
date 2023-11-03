@@ -1,29 +1,28 @@
 import { Hono } from 'hono';
 import Handlebars from './templates';
 import robotsTxt from './public/robots.txt';
-import indexCss from './public/theme/index.css';
+import indexCss from './public/theme/index-5eca4c37898bca4ff1a357cf7c481dfe0375b737.css';
 import favicon from './public/favicon.ico';
-import { Bindings, Variables, getBlog, getPage, getPosts, handleCaching, maxTime } from './utils';
+import { getBlog, getEtag, getPage, getPosts, handleCaching, maxTime } from './utils';
 import { NotFoundError } from '@phoenix/core/errors';
 import { sha256Sum } from '@phoenix/core/crypto';
 import { PageTemplate } from './pages/page';
 import { ErrorTemplate } from './pages/error';
 import { PostsTemplate } from './pages/posts';
 import TsxSha256Hash from './tsx_sha256.txt';
+import { Bindings, Variables } from './context';
 
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>();
+const etagsCache = new Map<string, string>();
 
 app.use('*', async (ctx, next) => {
   ctx.res.headers.set('X-Robots-Tag', 'noindex');
   await next();
 })
 
-let robotsTxtEtag: string | null = null;
 app.get('/robots.txt', async (ctx) => {
-  if (!robotsTxtEtag) {
-    robotsTxtEtag = await sha256Sum(robotsTxt);
-  }
-  const cacheHit = handleCaching(ctx, 'public, max-age=1800, must-revalidate', robotsTxtEtag);
+  let etag = await getEtag(etagsCache, '/robots.txt', robotsTxt);
+  const cacheHit = handleCaching(ctx, 'public, max-age=1800, must-revalidate', etag);
   if (cacheHit) {
     return cacheHit;
   }
@@ -31,12 +30,9 @@ app.get('/robots.txt', async (ctx) => {
   return ctx.text(robotsTxt);
 })
 
-let faviconEtag: string | null = null;
 app.get('/favicon.ico', async (ctx) => {
-  if (!faviconEtag) {
-    faviconEtag = await sha256Sum('/favicon.ico');
-  }
-  const cacheHit = handleCaching(ctx, 'public, max-age=31536000, immutable', faviconEtag);
+  let etag = await getEtag(etagsCache, '/favicon.ico', '/favicon.ico');
+  const cacheHit = handleCaching(ctx, 'public, max-age=3600, must-revalidate', etag);
   if (cacheHit) {
     return cacheHit;
   }
@@ -48,12 +44,9 @@ app.get('/favicon.ico', async (ctx) => {
   })
 })
 
-let indexCssEtag: string | null = null;
-app.get('/theme/index.css', async (ctx) => {
-  if (!indexCssEtag) {
-    indexCssEtag = await sha256Sum(indexCss);
-  }
-  const cacheHit = handleCaching(ctx, 'public, no-cache, must-revalidate', indexCssEtag);
+app.get('/theme/index-5eca4c37898bca4ff1a357cf7c481dfe0375b737.css', async (ctx) => {
+  let etag = await getEtag(etagsCache, '/theme/index-5eca4c37898bca4ff1a357cf7c481dfe0375b737.css', indexCss);
+  const cacheHit = handleCaching(ctx, 'public, max-age=31536000, immutable', etag);
   if (cacheHit) {
     return cacheHit;
   }
