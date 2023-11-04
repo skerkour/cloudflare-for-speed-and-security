@@ -83,6 +83,7 @@ import { getBlog, deleteBlog } from '@phoenix/core/api_client';
 import { useRoute, useRouter } from 'vue-router';
 import HtmlEditor from '@/components/html_editor.vue';
 import * as api from '@phoenix/core/api';
+import { useStore } from '@/app/store';
 
 // props
 
@@ -92,6 +93,7 @@ import * as api from '@phoenix/core/api';
 const $apiClient = useApiClient();
 const $route = useRoute();
 const $router = useRouter();
+const $store = useStore();
 
 // lifecycle
 onBeforeMount(() => fetchData());
@@ -109,7 +111,7 @@ let error = ref('');
 
 // functions
 async function fetchData() {
-  loading.value = true;
+  $store.setLoading(true);
   error.value = '';
 
   try {
@@ -117,7 +119,7 @@ async function fetchData() {
   } catch (err: any) {
     error.value = err.message;
   } finally {
-    loading.value = false;
+    $store.setLoading(false);
   }
 }
 

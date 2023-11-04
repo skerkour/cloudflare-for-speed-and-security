@@ -9,7 +9,7 @@
     </div>
   </div>
 
-  <div class="text-center" v-if="!loading && blogs.length === 0">
+  <div class="text-center" v-if="!$store.loading && blogs.length === 0">
     <FireIcon class="inline-flex items-center -ml-0.5 mr-1.5 h-16 w-16 color-grey" aria-hidden="true" />
     <h3 class="mt-2 text-sm font-semibold text-gray-900">No blogs</h3>
     <p class="mt-1 text-sm text-gray-500">Get started by creating a new blog.</p>
@@ -23,7 +23,7 @@
     </div>
   </div>
 
-  <div v-else-if="!loading && blogs.length > 0" class="flex flex-col justify-center max-w-2xl mx-auto">
+  <div v-else-if="!$store.loading && blogs.length > 0" class="flex flex-col justify-center max-w-2xl mx-auto">
     <div class="flex">
       <RouterLink  :to="newBlogUrl">
         <CfButton>
@@ -66,6 +66,7 @@ import { onBeforeMount, ref, type Ref } from 'vue';
 import * as api from '@phoenix/core/api';
 import { PlusIcon, FireIcon, ChevronRightIcon } from '@heroicons/vue/24/outline';
 import CfButton from '@/components/cf_button.vue';
+import { useStore } from '@/app/store';
 
 // props
 
@@ -73,12 +74,12 @@ import CfButton from '@/components/cf_button.vue';
 
 // composables
 const $apiClient = useApiClient();
+const $store = useStore();
 
 // lifecycle
 onBeforeMount(() => fetchData());
 
 // variables
-let loading = ref(false);
 let error = ref('');
 const newBlogUrl = '/blogs/new'
 
@@ -90,7 +91,7 @@ const blogs: Ref<Blog[]> = ref([]);
 
 // functions
 async function fetchData() {
-  loading.value = true;
+  $store.setLoading(true);
   error.value = '';
 
   try {
@@ -98,7 +99,7 @@ async function fetchData() {
   } catch (err: any) {
     error.value = err.message;
   } finally {
-    loading.value = false;
+    $store.setLoading(false);
   }
 }
 </script>

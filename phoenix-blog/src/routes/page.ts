@@ -1,8 +1,9 @@
 import { sha256Sum } from "@phoenix/core/crypto";
 import { Context } from "../context";
-import { getBlog, getPage, handleCaching, maxTime } from "../utils";
-import templatesHash from '../jsx_templates/templates_sha256.txt';
-import { PageTemplate } from "../jsx_templates/page";
+import { getBlog, getPage, maxTime } from "../utils";
+import templatesHash from '../templates_tsx/templates_sha256.txt';
+import { PageTemplate } from "../templates_tsx/page";
+import { handleCaching } from "../caching";
 
 export async function page(ctx: Context): Promise<Response> {
   const reqUrl = new URL(ctx.req.url);

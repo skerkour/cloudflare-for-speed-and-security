@@ -1,7 +1,6 @@
 import { sha256Sum } from "@phoenix/core/crypto";
 import { Context } from "../context";
-import { handleCaching } from "../utils";
-
+import { handleCaching } from "../caching";
 
 export async function handlebars(ctx: Context): Promise<Response> {
   const name = ctx.req.query('name') ?? 'Handlebars'

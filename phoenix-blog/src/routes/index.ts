@@ -1,7 +1,8 @@
 import { sha256Sum } from "@phoenix/core/crypto";
 import { Context } from "../context";
-import { PostsTemplate } from "../jsx_templates/posts";
-import { getBlog, getPosts, handleCaching } from "../utils";
+import { PostsTemplate } from "../templates_tsx/posts";
+import { getBlog, getPosts } from "../utils";
+import { handleCaching } from "../caching";
 
 export async function index(ctx: Context): Promise<Response> {
   // const reqUrl = new URL(ctx.req.url);

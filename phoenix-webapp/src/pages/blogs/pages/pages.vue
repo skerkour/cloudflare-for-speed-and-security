@@ -62,6 +62,7 @@ import * as api from '@phoenix/core/api';
 import { useRoute } from 'vue-router';
 import CfButton from '@/components/cf_button.vue';
 import { PlusIcon } from '@heroicons/vue/24/outline';
+import { useStore } from '@/app/store';
 
 // props
 
@@ -70,6 +71,7 @@ import { PlusIcon } from '@heroicons/vue/24/outline';
 // composables
 const $apiClient = useApiClient();
 const $route = useRoute();
+const $store = useStore();
 
 // lifecycle
 
@@ -77,7 +79,6 @@ const $route = useRoute();
 const blogId = $route.params.blog_id as string;
 const newPageUrl = `/blogs/${blogId}/pages/new`;
 
-let loading = ref(false);
 let error = ref('');
 
 const pages: Ref<Page[]> = ref([]);
@@ -93,7 +94,7 @@ function pageUrl(pageId: string) {
 }
 
 async function fetchData() {
-  loading.value = true;
+  $store.setLoading(true);
   error.value = '';
 
   try {
@@ -101,7 +102,7 @@ async function fetchData() {
   } catch (err: any) {
     error.value = err.message;
   } finally {
-    loading.value = false;
+    $store.setLoading(false);
   }
 }
 </script>

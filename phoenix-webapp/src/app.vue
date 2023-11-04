@@ -14,10 +14,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import Navbar from './components/navbar.vue';
 import Sidebar from './components/sidebar.vue';
 import { useStore } from './app/store';
+import NProgress from 'nprogress';
 
 // props
 
@@ -33,6 +34,13 @@ const $store = useStore();
 // computed
 
 // watch
+watch(() => $store.loading, (newValue, oldValue) => {
+  if (!oldValue && newValue) {
+    NProgress.start();
+  } else if (!newValue && oldValue) {
+    NProgress.done();
+  }
+})
 
 // functions
 </script>

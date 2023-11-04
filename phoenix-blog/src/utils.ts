@@ -4,21 +4,6 @@ import { InternalServerError, NotFoundError } from "@phoenix/core/errors";
 import { sha256Sum } from "@phoenix/core/crypto";
 import { Context } from "./context";
 
-export function handleCaching(ctx: Context, cacheControl: string, etag: string): Response | null {
-  ctx.res.headers.set('Cache-Control', cacheControl);
-  ctx.res.headers.set('ETag', `"${etag}"`);
-
-  const ifNoneMatch = ctx.req.header('If-None-Match')?.trim().replace('W/', '').replaceAll('"', '');
-  if (ifNoneMatch && ifNoneMatch === etag) {
-    return new Response(null, {
-      status: 304,
-      headers: ctx.res.headers,
-    });
-  }
-
-  return null;
-}
-
 export async function getBlog(ctx: Context, domain: string): Promise<Blog> {
   // service bindings expects a request with a full URL, se we set an invalid host
   const apiReq = new Request(`https://localhost/headless/blog?domain=${domain}`, ctx.req.raw);
@@ -94,13 +79,4 @@ export function date(val: Date | undefined) {
   }
   const date = new Date(val);
   return `${date.getFullYear()}-${date.getMonth()}-${date.getDay()}`;
-}
-
-export async function getEtag(cache: Map<string, string>, path: string, content: string): Promise<string> {
-  let etag = cache.get(path);
-  if (!etag) {
-    etag = await sha256Sum(content);
-    cache.set(path, etag);
-  }
-  return etag;
 }

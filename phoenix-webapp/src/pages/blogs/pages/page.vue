@@ -19,6 +19,7 @@ import { onBeforeMount, ref, type Ref } from 'vue';
 import { useRoute } from 'vue-router';
 import * as api from '@phoenix/core/api';
 import { useApiClient } from '@/app/api_client';
+import { useStore } from '@/app/store';
 
 // props
 
@@ -27,6 +28,7 @@ import { useApiClient } from '@/app/api_client';
 // composables
 const $route = useRoute();
 const $apiClient = useApiClient();
+const $store = useStore();
 
 // lifecycle
 onBeforeMount(() => fetchData());
@@ -34,7 +36,6 @@ onBeforeMount(() => fetchData());
 // variables
 const pageId = $route.params.page_id as string;
 
-let loading = ref(false);
 let error = ref('');
 const page: Ref<Page | null> = ref(null);
 
@@ -44,7 +45,7 @@ const page: Ref<Page | null> = ref(null);
 
 // functions
 async function fetchData() {
-  loading.value = true;
+  $store.setLoading(true);
   error.value = '';
 
   try {
@@ -52,7 +53,7 @@ async function fetchData() {
   } catch (err: any) {
     error.value = err.message;
   } finally {
-    loading.value = false;
+    $store.setLoading(false);
   }
 }
 </script>

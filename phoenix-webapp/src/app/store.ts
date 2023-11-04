@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 
 export interface AppState {
   isAuthenticated: boolean;
+  loading: boolean,
 }
 
 export const useStore = defineStore('store', {
@@ -12,6 +13,9 @@ export const useStore = defineStore('store', {
     },
     setIsAutenticated(isAuthenticated: boolean) {
       this.isAuthenticated = isAuthenticated;
+    },
+    setLoading(loading: boolean) {
+      this.loading = loading;
     }
   },
 })
@@ -19,5 +23,6 @@ export const useStore = defineStore('store', {
 function defaultAppState(): AppState {
   return {
     isAuthenticated: false,
+    loading: false,
   };
 }
