@@ -18,7 +18,7 @@ export const Base: FC = (props: Props) => {
                 <meta name="apple-mobile-web-app-capable" content="yes" />
                 <meta name="referrer" content="no-referrer-when-downgrade" />
 
-                <meta name="robots" content="noindex" />
+                <meta name="robots" content="noindex, nofollow" />
                 <link href="/theme/index-5eca4c37898bca4ff1a357cf7c481dfe0375b737.css" rel="stylesheet" />
                 <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 
