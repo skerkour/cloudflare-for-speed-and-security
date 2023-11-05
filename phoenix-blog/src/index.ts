@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
 import { NotFoundError } from '@phoenix/core/errors';
-import { ErrorTemplate } from './templates_tsx/error';
+import { ErrorTemplate } from './routes/_error';
 import { Bindings, Variables } from './context';
 import { robotsTxt } from './routes/robotstxt';
 import { favicon } from './routes/favicon';

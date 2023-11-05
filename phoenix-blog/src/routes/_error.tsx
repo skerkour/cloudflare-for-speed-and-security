@@ -1,5 +1,5 @@
 import type { FC } from 'hono/jsx';
-import { Base } from './base';
+import { Base } from './_base';
 
 type Props = {
     error: string,
