@@ -10,7 +10,6 @@ import { index } from './routes';
 import { page } from './routes/page';
 
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>();
-const etagsCache = new Map<string, string>();
 
 app.use('*', async (ctx, next) => {
   ctx.res.headers.set('X-Robots-Tag', 'noindex');
