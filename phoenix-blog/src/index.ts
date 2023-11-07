@@ -5,8 +5,9 @@ import { Bindings, Variables } from './context';
 import { handlebars } from './routes/handlebars';
 import { index } from './routes';
 import { page } from './routes/page';
-import { publicCacheControl, serveFavicon, serveRobotsTxt, serveTheme } from './routes/public';
+import { serveFavicon, serveRobotsTxt, serveTheme } from './routes/public';
 import { etag } from 'hono/etag'
+import { staticAssetsCacheControlMiddleware } from './caching';
 
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>();
 const staticAssets = new Hono<{ Bindings: Bindings; Variables: Variables }>();
@@ -17,7 +18,7 @@ app.use('*', async (ctx, next) => {
 })
 
 staticAssets.use('*', etag());
-staticAssets.use('*', publicCacheControl);
+staticAssets.use('*', staticAssetsCacheControlMiddleware);
 staticAssets.get('/robots.txt', etag(), serveRobotsTxt);
 staticAssets.get('/favicon.ico', serveFavicon);
 staticAssets.get('/theme/*', serveTheme);

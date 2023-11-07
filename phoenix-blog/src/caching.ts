@@ -1,4 +1,4 @@
-import { sha256Sum } from "@phoenix/core/crypto";
+import { Next } from "hono";
 import { Context } from "./context";
 
 export function handleCaching(ctx: Context, cacheControl: string, etag: string): Response | null {
@@ -14,4 +14,22 @@ export function handleCaching(ctx: Context, cacheControl: string, etag: string):
   }
 
   return null;
+}
+
+export async function staticAssetsCacheControlMiddleware(ctx: Context, next: Next) {
+  const url = new URL(ctx.req.url);
+  switch (url.pathname) {
+    case '/favicon.ico':
+      ctx.res.headers.set('Cache-Control', 'public, max-age=3600, must-revalidate');
+      break;
+    default: {
+      if (url.pathname.startsWith('/theme')) {
+        ctx.res.headers.set('Cache-Control', 'public, max-age=31536000, immutable');
+      } else {
+        ctx.res.headers.set('Cache-Control', 'public, max-age=1800, immutable');
+      }
+      break;
+    }
+  }
+  await next();
 }
