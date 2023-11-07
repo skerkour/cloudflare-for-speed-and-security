@@ -6,6 +6,9 @@ services = [
   { binding = "api", service = "phoenix-api" }
 ]
 
+[site]
+bucket = "./public"
+
 # See https://developers.cloudflare.com/workers/wrangler/bundling/
 # and https://developers.cloudflare.com/workers/wrangler/configuration/#bundling
 rules = [

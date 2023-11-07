@@ -2,23 +2,27 @@ import { Hono } from 'hono';
 import { NotFoundError } from '@phoenix/core/errors';
 import { ErrorTemplate } from './routes/_error';
 import { Bindings, Variables } from './context';
-import { robotsTxt } from './routes/robotstxt';
-import { favicon } from './routes/favicon';
-import { indexCss } from './routes/indexcss';
 import { handlebars } from './routes/handlebars';
 import { index } from './routes';
 import { page } from './routes/page';
+import { publicCacheControl, serveFavicon, serveRobotsTxt, serveTheme } from './routes/public';
+import { etag } from 'hono/etag'
 
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>();
+const staticAssets = new Hono<{ Bindings: Bindings; Variables: Variables }>();
 
 app.use('*', async (ctx, next) => {
   ctx.res.headers.set('X-Robots-Tag', 'noindex');
   await next();
 })
 
-app.get('/robots.txt', robotsTxt);
-app.get('/favicon.ico', favicon);
-app.get('/theme/index-5eca4c37898bca4ff1a357cf7c481dfe0375b737.css', indexCss);
+staticAssets.use('*', etag());
+staticAssets.use('*', publicCacheControl);
+staticAssets.get('/robots.txt', etag(), serveRobotsTxt);
+staticAssets.get('/favicon.ico', serveFavicon);
+staticAssets.get('/theme/*', serveTheme);
+
+app.route('/', staticAssets);
 
 app.get('/handlebars', handlebars);
 app.get('/', index);
