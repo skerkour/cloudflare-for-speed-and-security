@@ -5,7 +5,7 @@ import { Bindings, Variables } from './context';
 import { handlebars } from './routes/handlebars';
 import { index } from './routes';
 import { page } from './routes/page';
-import { serveFavicon, serveRobotsTxt, serveTheme } from './routes/public';
+import { serveFavicon, serveRobotsTxt, serveTheme } from './public';
 import { etag } from 'hono/etag'
 import { staticAssetsCacheControlMiddleware } from './caching';
 
