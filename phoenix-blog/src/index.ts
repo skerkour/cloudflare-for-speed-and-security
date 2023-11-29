@@ -5,9 +5,9 @@ import { Bindings, Variables } from './context';
 import { handlebars } from './routes/handlebars';
 import { index } from './routes';
 import { page } from './routes/page';
-import { serveFavicon, serveRobotsTxt, serveTheme } from './public';
 import { etag } from 'hono/etag'
 import { staticAssetsCacheControlMiddleware } from './caching';
+import { serveStatic } from 'hono/cloudflare-workers';
 
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>();
 const staticAssets = new Hono<{ Bindings: Bindings; Variables: Variables }>();
@@ -19,9 +19,10 @@ app.use('*', async (ctx, next) => {
 
 staticAssets.use('*', etag());
 staticAssets.use('*', staticAssetsCacheControlMiddleware);
-staticAssets.get('/robots.txt', etag(), serveRobotsTxt);
-staticAssets.get('/favicon.ico', serveFavicon);
-staticAssets.get('/theme/*', serveTheme);
+staticAssets.get('/robots.txt', serveStatic({ path: './robots.txt' }));
+staticAssets.get('/favicon.ico', serveStatic({ path: './favicon.ico' }));
+staticAssets.get('/theme/*', serveStatic());
+// staticAssets.get('*', serveStatic());
 
 app.route('/', staticAssets);
 

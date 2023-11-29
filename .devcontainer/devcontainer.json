@@ -1,8 +1,8 @@
 {
-    "dockerFile": "Dockerfile",
+    "dockerFile": "Dockerfile.node",
     "extensions": [
-      // "golang.Go",
-      "rust-lang.rust-analyzer"
+      // "rust-lang.rust-analyzer"
+      "Vue.volar"
     ],
     "forwardPorts": [
     ]

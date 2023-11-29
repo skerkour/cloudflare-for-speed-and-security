@@ -1,0 +1,42 @@
+FROM debian:bookworm
+
+ENV TZ="Europe/London"
+ENV LANG="en_US.UTF-8"
+ENV LANGUAGE="en_US:en"
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt update && apt upgrade -y
+RUN apt install -y git ca-certificates make vim postgresql-client \
+    bash gcc g++ curl wget zip coreutils locales mailcap pkg-config openssl gnupg libssl-dev procps
+
+# Set the locale
+RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && \
+    locale-gen
+ENV LC_ALL="en_US.UTF-8"
+
+RUN update-ca-certificates
+
+# setup node
+# https://github.com/nodesource/distributions
+RUN mkdir -p /etc/apt/keyrings
+RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+env NODE_MAJOR=20
+RUN echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
+RUN apt update && apt install -y nodejs
+RUN npm install -g npm@latest
+
+# Setup dev user
+ARG USERNAME=dev
+ARG USER_UID=10001
+ARG USER_GID=$USER_UID
+
+RUN addgroup --gid $USER_GID $USERNAME \
+    && adduser --uid $USER_UID --ingroup $USERNAME --disabled-password --shell /bin/bash --gecos "" $USERNAME
+
+USER $USERNAME
+
+COPY --chown=$USERNAME bashrc /home/$USERNAME/.bashrc
+COPY --chown=$USERNAME vimrc /home/$USERNAME/.vimrc
+
+WORKDIR /
