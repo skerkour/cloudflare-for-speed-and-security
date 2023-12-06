@@ -2,8 +2,8 @@ import { setCookie } from "hono/cookie";
 import { Context } from "../hono_bindings";
 import jwt from "@phoenix/jwt";
 import { NotFoundError, PermissionDeniedError } from "@phoenix/core/errors";
-import { base64ToBuffer, hashPassword, parseAndValidateApiInput } from "../utils";
-import { LoginInputValidator, convertToApiResponse, convertUser } from "@phoenix/core/api";
+import { base64ToBuffer, hashPassword, newApiResponse, parseAndValidateApiInput } from "../utils";
+import { LoginInputValidator, convertUser } from "@phoenix/core/api";
 import { UserValidator } from "@phoenix/core/entities";
 
 export async function login(ctx: Context): Promise<Response> {
@@ -37,5 +37,5 @@ export async function login(ctx: Context): Promise<Response> {
     { httpOnly: false, expires: expiresAt, sameSite: 'Lax', secure: true, path: '/' },
   );
 
-  return ctx.json(convertToApiResponse(convertUser(user)));
+  return newApiResponse(convertUser(user));
 }

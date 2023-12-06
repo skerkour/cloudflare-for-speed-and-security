@@ -5,6 +5,16 @@ import jwt from "@phoenix/jwt";
 import { ZodSchema } from "zod";
 import { UserValidator } from "@phoenix/core/entities";
 
+export function newApiResponse<T>(data: T, status = 200): Response {
+  return new Response(JSON.stringify({ data, error: null }), {
+    status: status,
+    headers: {
+      'content-type': 'application/json'
+    },
+  });
+}
+
+
 /**
  * Hash the given password with `PBKDF2-SHA-512` using userId as a salt
  */

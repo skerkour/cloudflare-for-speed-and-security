@@ -1,7 +1,7 @@
 import { Context } from "../hono_bindings";
-import { checkAuth, parseAndValidateApiInput } from "../utils";
-import { GetPagesInputValidator, convertToApiResponse } from "@phoenix/core/api";
-import { Page, PageValidator } from "@phoenix/core/entities";
+import { checkAuth, newApiResponse, parseAndValidateApiInput } from "../utils";
+import { GetPagesInputValidator } from "@phoenix/core/api";
+import { PageValidator } from "@phoenix/core/entities";
 
 export async function getPages(ctx: Context): Promise<Response> {
   await checkAuth(ctx);
@@ -13,5 +13,5 @@ export async function getPages(ctx: Context): Promise<Response> {
     .all();
   const pages = pagesRes.results.map((p) => PageValidator.parse(p));
 
-  return ctx.json(convertToApiResponse(pages));
+  return newApiResponse(pages);
 }

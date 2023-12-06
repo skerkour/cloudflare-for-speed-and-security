@@ -1,10 +1,10 @@
-import { convertToApiResponse } from "@phoenix/core/api";
 import { Context } from "../hono_bindings";
-import { Page, PageValidator } from "@phoenix/core/entities";
+import { PageValidator } from "@phoenix/core/entities";
+import { newApiResponse } from "../utils";
 
 export async function headlessGetPosts(ctx: Context): Promise<Response> {
   const blogDomainInput = ctx.req.query('domain')?.trim() ?? '';
-  const blogSlug = blogDomainInput.replace(`.?{ctx.env.BLOGS_ROOT_DOMAIN}`, '');
+  const blogSlug = blogDomainInput.replace(`.${ctx.env.BLOGS_ROOT_DOMAIN}`, '');
 
   const pagesRes = await ctx.env.DB.prepare(`SELECT pages.* FROM pages
     INNER JOIN blogs ON pages.blog_id = blogs.id
@@ -16,5 +16,5 @@ export async function headlessGetPosts(ctx: Context): Promise<Response> {
   const pages = pagesRes.results.map((p) => PageValidator.parse(p));
 
 
-  return ctx.json(convertToApiResponse(pages));
+  return newApiResponse(pages);
 }

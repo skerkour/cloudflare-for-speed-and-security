@@ -1,8 +1,8 @@
-import { bufferToBase64, hashPassword, parseAndValidateApiInput } from "../utils";
+import { bufferToBase64, hashPassword, newApiResponse, parseAndValidateApiInput } from "../utils";
 import { uuidv7 } from "@phoenix/uuidv7";
-import { InternalServerError, PermissionDeniedError } from "@phoenix/core/errors";
+import { PermissionDeniedError } from "@phoenix/core/errors";
 import { User } from "@phoenix/core/entities";
-import { SignupInputValidator, convertToApiResponse, convertUser } from "@phoenix/core/api";
+import { SignupInputValidator, convertUser } from "@phoenix/core/api";
 import { Context } from "../hono_bindings";
 import jwt from "@phoenix/jwt";
 import { setCookie } from "hono/cookie";
@@ -60,5 +60,5 @@ export async function signup(ctx: Context): Promise<Response> {
     { httpOnly: false, expires: expiresAt, sameSite: 'Lax', secure: true, path: '/' },
   );
 
-  return ctx.json(convertToApiResponse(convertUser(user)));
+  return newApiResponse(convertUser(user));
 }

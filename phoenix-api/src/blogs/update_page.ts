@@ -1,8 +1,8 @@
 import { Context } from "../hono_bindings";
-import { checkAuth, checkIsAdmin, parseAndValidateApiInput } from "../utils";
+import { checkAuth, checkIsAdmin, newApiResponse, parseAndValidateApiInput } from "../utils";
 import { NotFoundError } from "@phoenix/core/errors";
-import { UpdatePageInputValidator, convertToApiResponse } from "@phoenix/core/api";
-import { Page, PageValidator } from "@phoenix/core/entities";
+import { UpdatePageInputValidator } from "@phoenix/core/api";
+import { PageValidator } from "@phoenix/core/entities";
 
 export async function updatePage(ctx: Context): Promise<Response> {
   const userId = await checkAuth(ctx);
@@ -30,5 +30,5 @@ export async function updatePage(ctx: Context): Promise<Response> {
     .bind(page.updated_at.toISOString(), page.slug, page.title, page.content_html, page.id)
     .run();
 
-  return ctx.json(convertToApiResponse(page));
+  return newApiResponse(page);
 }
