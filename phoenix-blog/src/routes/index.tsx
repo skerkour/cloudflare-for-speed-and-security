@@ -6,6 +6,7 @@ import { Blog, Page } from '@phoenix/core/entities';
 import type { FC } from 'hono/jsx';
 import { Base } from './_base';
 import { date } from '../utils';
+import { HtmlEscapedString } from "hono/utils/html";
 
 export async function index(ctx: Context): Promise<Response> {
   // const reqUrl = new URL(ctx.req.url);
@@ -15,7 +16,7 @@ export async function index(ctx: Context): Promise<Response> {
     getPosts(ctx, domain),
   ]);
 
-  const html = IndexTemplate({ blog, posts });
+  const html = IndexTemplate({ blog, posts }) as HtmlEscapedString;
   const etag = await sha256Sum(html);
   const cacheHit = handleCaching(ctx, 'public, no-cache, must-revalidate', etag);
   if (cacheHit) {
