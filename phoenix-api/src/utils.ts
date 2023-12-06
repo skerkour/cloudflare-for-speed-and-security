@@ -4,16 +4,16 @@ import { InvalidArgumentError, NotFoundError, PermissionDeniedError } from "@pho
 import jwt from "@phoenix/jwt";
 import { ZodSchema } from "zod";
 import { UserValidator } from "@phoenix/core/entities";
+import { ApiResponse } from "@phoenix/core/api_client";
 
-export function newApiResponse<T>(data: T, status = 200): Response {
-  return new Response(JSON.stringify({ data, error: null }), {
-    status: status,
-    headers: {
-      'content-type': 'application/json'
-    },
-  });
+export function sendApiResponse<T>(ctx: Context, data: T, status = 200): Response {
+  const body: ApiResponse<T> = {
+    data: data,
+    error: null,
+  };
+  // we convert to any because hono's json function is too restrictive (doesn't accept Date...)
+  return ctx.json(body as any, status);
 }
-
 
 /**
  * Hash the given password with `PBKDF2-SHA-512` using userId as a salt

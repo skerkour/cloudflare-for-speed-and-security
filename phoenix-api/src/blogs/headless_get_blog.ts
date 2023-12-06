@@ -1,7 +1,7 @@
 import { Context } from "../hono_bindings";
 import { NotFoundError } from "@phoenix/core/errors";
 import { parseBlogFromDB } from "./utils";
-import { newApiResponse } from "../utils";
+import { sendApiResponse } from "../utils";
 
 export async function headlessGetBlog(ctx: Context): Promise<Response> {
   const blogDomainInput = ctx.req.query('domain')?.trim() ?? '';
@@ -15,5 +15,5 @@ export async function headlessGetBlog(ctx: Context): Promise<Response> {
   }
   const blog = parseBlogFromDB(blogRes);
 
-  return newApiResponse(blog);
+  return sendApiResponse(ctx, blog);
 }

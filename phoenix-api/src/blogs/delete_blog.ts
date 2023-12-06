@@ -1,5 +1,5 @@
 import { Context } from "../hono_bindings";
-import { checkAuth, checkIsAdmin, newApiResponse, parseAndValidateApiInput } from "../utils";
+import { checkAuth, checkIsAdmin, parseAndValidateApiInput, sendApiResponse } from "../utils";
 import { DeleteBlogInputValidator } from "@phoenix/core/api";
 
 export async function deleteBlog(ctx: Context): Promise<Response> {
@@ -12,5 +12,5 @@ export async function deleteBlog(ctx: Context): Promise<Response> {
     .bind(apiInput.blog_id)
     .run();
 
-  return newApiResponse({ ok: true });
+  return sendApiResponse(ctx, { ok: true });
 }

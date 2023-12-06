@@ -1,5 +1,5 @@
 import { Context } from "../hono_bindings";
-import { checkAuth, newApiResponse, parseAndValidateApiInput } from "../utils";
+import { checkAuth, parseAndValidateApiInput, sendApiResponse } from "../utils";
 import { NotFoundError } from "@phoenix/core/errors";
 import { GetPageInputValidator } from "@phoenix/core/api";
 import { Page, PageValidator } from "@phoenix/core/entities";
@@ -17,5 +17,5 @@ export async function getPage(ctx: Context): Promise<Response> {
   }
   const page = PageValidator.parse(pageRes);
 
-  return newApiResponse(page);
+  return sendApiResponse(ctx, page);
 }

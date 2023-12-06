@@ -1,6 +1,6 @@
 import { NotFoundError } from "@phoenix/core/errors";
 import { Context } from "../hono_bindings";
-import { checkAuth, checkIsAdmin, newApiResponse, parseAndValidateApiInput } from "../utils";
+import { checkAuth, checkIsAdmin, parseAndValidateApiInput, sendApiResponse } from "../utils";
 import { DeletePageInputValidator } from "@phoenix/core/api";
 import { Page, PageValidator } from "@phoenix/core/entities";
 
@@ -23,5 +23,5 @@ export async function deletePage(ctx: Context): Promise<Response> {
     .bind(apiInput.page_id)
     .run();
 
-  return newApiResponse({ ok: true });
+  return sendApiResponse(ctx, { ok: true });
 }

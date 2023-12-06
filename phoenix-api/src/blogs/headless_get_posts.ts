@@ -1,6 +1,6 @@
 import { Context } from "../hono_bindings";
 import { PageValidator } from "@phoenix/core/entities";
-import { newApiResponse } from "../utils";
+import { sendApiResponse } from "../utils";
 
 export async function headlessGetPosts(ctx: Context): Promise<Response> {
   const blogDomainInput = ctx.req.query('domain')?.trim() ?? '';
@@ -16,5 +16,5 @@ export async function headlessGetPosts(ctx: Context): Promise<Response> {
   const pages = pagesRes.results.map((p) => PageValidator.parse(p));
 
 
-  return newApiResponse(pages);
+  return sendApiResponse(ctx, pages);
 }

@@ -1,12 +1,11 @@
 import { z } from 'zod';
 import { PageType, type User } from './entities';
 import deepClone from '@phoenix/deepclone';
-import type { ApiResponse } from './api_client';
 
 export * from './api_client';
 export * from './api_routes';
 
-export function convertToApiResponse<T>(data: T): ApiResponse<T> {
+export function convertToApiResponse<T>(data: T): any {
   return {
     data: data,
     error: null,

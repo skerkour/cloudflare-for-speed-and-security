@@ -1,4 +1,4 @@
-import { checkAuth, newApiResponse, parseAndValidateApiInput } from "../utils";
+import { checkAuth, parseAndValidateApiInput, sendApiResponse } from "../utils";
 import { NotFoundError } from "@phoenix/core/errors";
 import { uuidv7 } from "@phoenix/uuidv7";
 import { checkIsAdmin } from "../utils";
@@ -44,5 +44,5 @@ export async function createPage(ctx: Context): Promise<Response> {
   .bind(now.toISOString(), blog.id)
   .run();
 
-  return newApiResponse(page);
+  return sendApiResponse(ctx, page);
 }

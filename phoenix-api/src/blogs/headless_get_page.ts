@@ -1,7 +1,7 @@
 import { Context } from "../hono_bindings";
 import { NotFoundError } from "@phoenix/core/errors";
 import { PageValidator } from "@phoenix/core/entities";
-import { newApiResponse } from "../utils";
+import { sendApiResponse } from "../utils";
 
 export async function headlessGetPage(ctx: Context): Promise<Response> {
   const pageSlug = ctx.req.query('slug')?.trim() ?? '';
@@ -19,5 +19,5 @@ export async function headlessGetPage(ctx: Context): Promise<Response> {
   }
   const page = PageValidator.parse(pageRes);
 
-  return newApiResponse(page);
+  return sendApiResponse(ctx, page);
 }

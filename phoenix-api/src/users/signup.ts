@@ -1,4 +1,4 @@
-import { bufferToBase64, hashPassword, newApiResponse, parseAndValidateApiInput } from "../utils";
+import { bufferToBase64, hashPassword, parseAndValidateApiInput, sendApiResponse } from "../utils";
 import { uuidv7 } from "@phoenix/uuidv7";
 import { PermissionDeniedError } from "@phoenix/core/errors";
 import { User } from "@phoenix/core/entities";
@@ -60,5 +60,5 @@ export async function signup(ctx: Context): Promise<Response> {
     { httpOnly: false, expires: expiresAt, sameSite: 'Lax', secure: true, path: '/' },
   );
 
-  return newApiResponse(convertUser(user));
+  return sendApiResponse(ctx, convertUser(user));
 }
