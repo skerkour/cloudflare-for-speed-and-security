@@ -13,7 +13,6 @@
     "url": "git+https://github.com/skerkour/cloudflare-for-speed-and-security.git"
   },
   "dependencies": {
-    "@neondatabase/serverless": "^0.6.0",
     "hono": "^3.8.3"
   }
 }

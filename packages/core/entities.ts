@@ -11,7 +11,7 @@ export const UserValidator = z.object({
 
   email: z.string(),
   password_hash: z.string(),
-  is_admin: z.boolean(),
+  is_admin: z.coerce.boolean(),
 }).strict();
 
 export type User = z.infer<typeof UserValidator>;

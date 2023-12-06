@@ -14,17 +14,8 @@ export async function signup(ctx: Context): Promise<Response> {
   // 1. the admin account to manage resources
   // 2. the readers account with read-only access
   let isAdmin = false;
-  const usersCountRes = await ctx.var.db.query('SELECT COUNT(*)::BIGINT as users_count FROM users');
-  if (usersCountRes.rowCount !== 1) {
-    throw new InternalServerError();
-  }
-  let usersCount = usersCountRes.rows[0].users_count as number | undefined;
-  if (usersCount === undefined) {
-    throw new InternalServerError();
-  } else if (typeof usersCount === 'string') {
-    // for some reasons, pg returns a string...
-    usersCount = parseInt(usersCount, 10);
-  }
+  const usersCount: number = await ctx.env.DB.prepare('SELECT COUNT(*) as users_count FROM users')
+    .first('users_count') as number;
 
   if (usersCount === 0) {
     isAdmin = true;
@@ -46,11 +37,15 @@ export async function signup(ctx: Context): Promise<Response> {
     is_admin: isAdmin,
   };
 
-  await ctx.var.db.query(`INSERT INTO users
+  // while it should be handled automatically by the database driver, we now need to manually convert
+  // booleans into integers due to this issue:
+  // https://github.com/cloudflare/workers-sdk/issues/3070
+  await ctx.env.DB.prepare(`INSERT INTO users
     (id, created_at, updated_at, email, password_hash, is_admin)
-    VALUES ($1, $2, $3, $4, $5, $6)`,
-    [user.id, user.created_at, user.updated_at, user.email, user.password_hash, user.is_admin]);
-
+    VALUES (?1, ?2, ?3, ?4, ?5, ?6)`)
+    .bind(user.id, user.created_at.toISOString(), user.updated_at.toISOString(),
+      user.email, user.password_hash, user.is_admin ? 1 : 0)
+    .run();
 
   const nowUnixMs = Date.now();
   const expiresAt = new Date(nowUnixMs + (50 * 1000 * 60 * 60)); // Expires: Now + 50 hours

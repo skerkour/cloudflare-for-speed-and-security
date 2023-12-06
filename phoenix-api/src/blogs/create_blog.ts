@@ -6,7 +6,7 @@ import { Context } from "../hono_bindings";
 
 export async function createBlog(ctx: Context): Promise<Response> {
   const userId = await checkAuth(ctx);
-  await checkIsAdmin(ctx.var.db, userId);
+  await checkIsAdmin(ctx.env.DB, userId);
 
   const apiInput = await parseAndValidateApiInput(ctx, CreateBlogInputValidator);
 
@@ -21,11 +21,12 @@ export async function createBlog(ctx: Context): Promise<Response> {
     description_html: '',
   };
 
-  await ctx.var.db.query(`INSERT INTO blogs
+  await ctx.env.DB.prepare(`INSERT INTO blogs
     (id, created_at, updated_at, name, slug, navigation, description_html)
-    VALUES($1, $2, $3, $4, $5, $6, $7)`,
-    [blog.id, blog.created_at, blog.updated_at, blog.name, blog.slug, blog.navigation, blog.description_html],
-  );
+    VALUES(?1, ?2, ?3, ?4, ?5, ?6, ?7)`)
+    .bind(blog.id, blog.created_at.toISOString(), blog.updated_at.toISOString(), blog.name, blog.slug,
+      JSON.stringify(blog.navigation), blog.description_html)
+    .run();
 
   return ctx.json(convertToApiResponse(blog));
 }

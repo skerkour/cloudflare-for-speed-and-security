@@ -4,11 +4,13 @@ import { DeleteBlogInputValidator, convertToApiResponse } from "@phoenix/core/ap
 
 export async function deleteBlog(ctx: Context): Promise<Response> {
   const userId = await checkAuth(ctx);
-  await checkIsAdmin(ctx.var.db, userId);
+  await checkIsAdmin(ctx.env.DB, userId);
 
   const apiInput = await parseAndValidateApiInput(ctx, DeleteBlogInputValidator);
 
-  await ctx.var.db.query('DELETE FROM blogs WHERE id = $1', [apiInput.blog_id]);
+  await ctx.env.DB.prepare('DELETE FROM blogs WHERE id = ?1')
+    .bind(apiInput.blog_id)
+    .run();
 
   return ctx.json(convertToApiResponse({ ok: true }));
 }

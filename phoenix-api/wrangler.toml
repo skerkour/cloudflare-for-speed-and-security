@@ -3,18 +3,18 @@ main = "src/app.ts"
 compatibility_date = "2023-09-18"
 
 
-
 vars = []
-
 
 r2_buckets = [
   { binding = "r2", bucket_name = "phoenix-dev" }
 ]
 
+d1_databases = [
+  { binding = "DB", database_name = "phoenix", database_id = "14bdbbc2-5f73-4242-a5e4-09c8db193bc5" }
+]
+
 [placement]
 mode = "smart"
-
-
 
 [env.production]
 

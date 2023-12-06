@@ -1,15 +1,13 @@
-import { type Pool } from '@neondatabase/serverless';
 import { Context as HonoContext } from "hono";
 
 
 export type Bindings = {
-  DATABASE_URL: string;
   JWT_SECRET: string;
   BLOGS_ROOT_DOMAIN: string;
+  DB: D1Database;
 };
 
 export type Variables = {
-  db: Pool;
   request_id: string;
 };
 

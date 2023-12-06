@@ -2,22 +2,26 @@ import { NotFoundError } from "@phoenix/core/errors";
 import { Context } from "../hono_bindings";
 import { checkAuth, checkIsAdmin, parseAndValidateApiInput } from "../utils";
 import { DeletePageInputValidator, convertToApiResponse } from "@phoenix/core/api";
-import { Page } from "@phoenix/core/entities";
+import { Page, PageValidator } from "@phoenix/core/entities";
 
 export async function deletePage(ctx: Context): Promise<Response> {
   const userId = await checkAuth(ctx);
-  await checkIsAdmin(ctx.var.db, userId);
+  await checkIsAdmin(ctx.env.DB, userId);
 
   const apiInput = await parseAndValidateApiInput(ctx, DeletePageInputValidator);
 
-  const pageRes = await ctx.var.db.query('SELECT * FROM pages WHERE id = $1', [apiInput.page_id]);
-  if (pageRes.rowCount !== 1) {
+  const pageRes = await ctx.env.DB.prepare('SELECT * FROM pages WHERE id = ?1')
+    .bind(apiInput.page_id)
+    .first();
+  if (!pageRes) {
     throw new NotFoundError('page not found');
   }
-  const page: Page = pageRes.rows[0];
+  const page = PageValidator.parse(pageRes);
   const now = new Date();
 
-  await ctx.var.db.query('DELETE FROM pages WHERE id = $1', [apiInput.page_id]);
+  await ctx.env.DB.prepare('DELETE FROM pages WHERE id = ?1')
+    .bind(apiInput.page_id)
+    .run();
 
   return ctx.json(convertToApiResponse({ ok: true }));
 }

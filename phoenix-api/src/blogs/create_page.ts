@@ -5,18 +5,21 @@ import { checkIsAdmin } from "../utils";
 import { CreatePageInputValidator, convertToApiResponse } from "@phoenix/core/api";
 import { Blog, Page } from "@phoenix/core/entities";
 import { Context } from "../hono_bindings";
+import { parseBlogFromDB } from "./utils";
 
 export async function createPage(ctx: Context): Promise<Response> {
   const userId = await checkAuth(ctx);
-  await checkIsAdmin(ctx.var.db, userId);
+  await checkIsAdmin(ctx.env.DB, userId);
 
   const apiInput = await parseAndValidateApiInput(ctx, CreatePageInputValidator);
 
-  const blogRes = await ctx.var.db.query('SELECT * FROM blogs WHERE id = $1', [apiInput.blog_id]);
-  if (blogRes.rowCount !== 1) {
+  const blogRes = await ctx.env.DB.prepare('SELECT * FROM blogs WHERE id = ?1')
+    .bind(apiInput.blog_id)
+    .first();
+  if (!blogRes) {
     throw new NotFoundError('blog not found');
   }
-  const blog: Blog = blogRes.rows[0];
+  const blog: Blog = parseBlogFromDB(blogRes)
 
   const now = new Date();
   const page: Page = {
@@ -30,13 +33,16 @@ export async function createPage(ctx: Context): Promise<Response> {
     blog_id: blog.id,
   };
 
-  await ctx.var.db.query(`INSERT INTO pages
+  await ctx.env.DB.prepare(`INSERT INTO pages
     (id, created_at, updated_at, slug, type, title, content_html, blog_id)
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
-    [page.id, page.created_at, page.updated_at, page.slug, page.type, page.title, page.content_html, page.blog_id],
-  );
+    VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)`)
+    .bind(page.id, page.created_at.toISOString(), page.updated_at.toISOString(), page.slug, page.type,
+      page.title, page.content_html, page.blog_id)
+    .run();
 
-  await ctx.var.db.query(`UPDATE blogs SET updated_at = $1 WHERE id = $2`, [now, blog.id]);
+  await ctx.env.DB.prepare(`UPDATE blogs SET updated_at = ?1 WHERE id = ?2`)
+  .bind(now.toISOString(), blog.id)
+  .run();
 
   return ctx.json(convertToApiResponse(page));
 }

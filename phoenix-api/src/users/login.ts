@@ -4,16 +4,18 @@ import jwt from "@phoenix/jwt";
 import { NotFoundError, PermissionDeniedError } from "@phoenix/core/errors";
 import { base64ToBuffer, hashPassword, parseAndValidateApiInput } from "../utils";
 import { LoginInputValidator, convertToApiResponse, convertUser } from "@phoenix/core/api";
-import { User } from "@phoenix/core/entities";
+import { UserValidator } from "@phoenix/core/entities";
 
 export async function login(ctx: Context): Promise<Response> {
   const apiInput = await parseAndValidateApiInput(ctx, LoginInputValidator);
 
-  const usersRes = await ctx.var.db.query('SELECT * FROM users WHERE email = $1', [apiInput.email]);
-  if (usersRes.rowCount !== 1) {
+  const userFromDb = await ctx.env.DB.prepare('SELECT * FROM users WHERE email = ?1')
+    .bind(apiInput.email)
+    .first();
+  if (!userFromDb) {
     throw new NotFoundError('account not found');
   }
-  const user: User = usersRes.rows[0];
+  const user = UserValidator.parse(userFromDb);
 
   const inputPasswordHash = await hashPassword(apiInput.password, user.id);
   const userPasswordHash = base64ToBuffer(user.password_hash);

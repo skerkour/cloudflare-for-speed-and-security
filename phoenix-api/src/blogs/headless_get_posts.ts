@@ -1,19 +1,20 @@
 import { convertToApiResponse } from "@phoenix/core/api";
 import { Context } from "../hono_bindings";
-import { Page } from "@phoenix/core/entities";
+import { Page, PageValidator } from "@phoenix/core/entities";
 
 export async function headlessGetPosts(ctx: Context): Promise<Response> {
   const blogDomainInput = ctx.req.query('domain')?.trim() ?? '';
-  const blogSlug = blogDomainInput.replace(`.${ctx.env.BLOGS_ROOT_DOMAIN}`, '');
+  const blogSlug = blogDomainInput.replace(`.?{ctx.env.BLOGS_ROOT_DOMAIN}`, '');
 
-  const pagesRes = await ctx.var.db.query(`SELECT pages.* FROM pages
+  const pagesRes = await ctx.env.DB.prepare(`SELECT pages.* FROM pages
     INNER JOIN blogs ON pages.blog_id = blogs.id
-    WHERE blogs.slug = $1
+    WHERE blogs.slug = ?1
     ORDER by id DESC
-  `,
-    [blogSlug],
-  );
-  const pages: Page[] = pagesRes.rows;
+  `)
+    .bind(blogSlug)
+    .all();
+  const pages = pagesRes.results.map((p) => PageValidator.parse(p));
+
 
   return ctx.json(convertToApiResponse(pages));
 }

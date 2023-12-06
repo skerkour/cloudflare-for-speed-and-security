@@ -1,5 +1,4 @@
 import { Hono } from 'hono';
-import { Pool, neonConfig } from '@neondatabase/serverless';
 import { ErrorCode, NotFoundError, PermissionDeniedError, formatZodError } from '@phoenix/core/errors';
 import { ApiError, ApiResponse, Routes } from '@phoenix/core/api';
 import { requestIdMiddleware } from '@phoenix/core/middlewares';
@@ -25,16 +24,16 @@ const app = new Hono<{ Bindings: Bindings; Variables: Variables }>();
 
 // Middlewares
 app.use('*', requestIdMiddleware());
-app.use('*', async (ctx, next) => {
-  // we use the pool.fetch connection method. See chapter 2 for the "why"
-  neonConfig.poolQueryViaFetch = true;
-  neonConfig.fetchConnectionCache = true;
+// app.use('*', async (ctx, next) => {
+//   // we use the pool.fetch connection method. See chapter 2 for the "why"
+//   neonConfig.poolQueryViaFetch = true;
+//   neonConfig.fetchConnectionCache = true;
 
-  const pgClient = new Pool({ connectionString: ctx.env.DATABASE_URL });
+//   const pgClient = new Pool({ connectionString: ctx.env.DATABASE_URL });
 
-  ctx.set('db', pgClient);
-  await next();
-});
+//   ctx.set('db', pgClient);
+//   await next();
+// });
 
 
 // API

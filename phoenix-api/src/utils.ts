@@ -2,9 +2,8 @@ import { Context } from "./hono_bindings";
 import { getCookie } from "hono/cookie";
 import { InvalidArgumentError, NotFoundError, PermissionDeniedError } from "@phoenix/core/errors";
 import jwt from "@phoenix/jwt";
-import { Pool } from "@neondatabase/serverless";
 import { ZodSchema } from "zod";
-import { User } from "@phoenix/core/entities";
+import { UserValidator } from "@phoenix/core/entities";
 
 /**
  * Hash the given password with `PBKDF2-SHA-512` using userId as a salt
@@ -75,12 +74,14 @@ export async function checkAuth(ctx: Context): Promise<string> {
 /**
  * We only allow Admins to performs create/update/delete actions for the demo
  */
-export async function checkIsAdmin(db: Pool, userId: string) {
-  const usersRes = await db.query('SELECT * FROM users WHERE id = $1', [userId]);
-  if (usersRes.rowCount !== 1) {
+export async function checkIsAdmin(db: D1Database, userId: string) {
+  const userRes = await db.prepare('SELECT * FROM users WHERE id = ?1')
+    .bind(userId)
+    .first();
+  if (!userRes) {
     throw new NotFoundError('user not found');
   }
-  const user: User = usersRes.rows[0];
+  const user = UserValidator.parse(userRes);
   if (!user.is_admin) {
     throw new PermissionDeniedError('Some actions are disabled for the demo');
   }

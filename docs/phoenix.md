@@ -9,10 +9,6 @@
 
 You need 2 domains, let's say `phoenix.com` and `phoenix.blog` already setup on Cloudflare.
 
-Create an account and a database at https://neon.tech
-
-Import the database schema from `phoenix-api/migrations/0000.up.sql` into the database (`psql` is enough, or from Neon's dashboard).
-
 Make sure that you have Node.js installed (see `.devcontainer/Dockerfile` for and example of setup).
 
 Then, in the root folder of this repository, run:
@@ -21,14 +17,11 @@ $ make install_ci
 $ make deploy
 ```
 
+Create a D1 database named `phoenix`: `Workers & Pages` > `D1`.
+
 In your Cloudflare dashboard, go to `Workers & Pages` > `pingoo-api` > `Settings` > `Variables`.
 
 Create the following Environment Variable:
-```
-Variable name: DATABASE_URL
-Value: postgres://[YOUR_NEON_DATABASE_URL]
-Encrypt: true
-```
 
 ```
 Variable name: JWT_SECRET
@@ -53,8 +46,6 @@ Worker: phoenix-blog
 
 
 ## Development
-
-First, create an account and a database at https://neon.tech
 
 Make sure that you have Node.js installed (see `.devcontainer/Dockerfile` for and example of setup).
 

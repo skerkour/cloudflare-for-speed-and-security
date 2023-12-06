@@ -2,18 +2,20 @@ import { Context } from "../hono_bindings";
 import { checkAuth, parseAndValidateApiInput } from "../utils";
 import { NotFoundError } from "@phoenix/core/errors";
 import { GetBlogInputValidator, convertToApiResponse } from "@phoenix/core/api";
-import { Blog } from "@phoenix/core/entities";
+import { parseBlogFromDB } from "./utils";
 
 export async function getBlog(ctx: Context): Promise<Response> {
   await checkAuth(ctx);
 
   const apiInput = await parseAndValidateApiInput(ctx, GetBlogInputValidator);
 
-  const blogsRes = await ctx.var.db.query('SELECT * FROM blogs WHERE id = $1', [apiInput.blog_id]);
-  if (blogsRes.rowCount !== 1) {
+  const blogRes = await ctx.env.DB.prepare('SELECT * FROM blogs WHERE id = ?1')
+    .bind(apiInput.blog_id)
+    .first();
+  if (!blogRes) {
     throw new NotFoundError('Blog not found');
   }
-  const blog: Blog = blogsRes.rows[0];
+  const blog = parseBlogFromDB(blogRes);
 
   return ctx.json(convertToApiResponse(blog));
 }
