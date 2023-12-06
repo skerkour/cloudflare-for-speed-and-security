@@ -18,13 +18,13 @@ export default defineConfig({
       output: {
         // we use the full hashes to reduces the risk of collision with assets cached for long time
         assetFileNames(chunkInfo) {
-          return `webapp/[name]-[hash:32][extname]`;
+          return `webapp/[name]-[hash:22][extname]`;
         },
         chunkFileNames(chunkInfo) {
-          return `webapp/[name]-[hash:32].js`;
+          return `webapp/[name]-[hash:22].js`;
         },
         entryFileNames(chunkInfo) {
-          return `webapp/[name]-[hash:32].js`;
+          return `webapp/[name]-[hash:22].js`;
         },
       },
     },
