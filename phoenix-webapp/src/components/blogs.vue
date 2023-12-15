@@ -45,7 +45,7 @@
                   {{ blog.name }}
                 </p>
                 <p class="mt-1 flex text-xs leading-5 text-gray-500">
-                  <span class="relative truncate">{{ blog.slug }}.cloudflarebook.net</span>
+                  <span class="relative truncate">{{ blog.slug }}.cloudflarebook.com</span>
                 </p>
               </div>
             </div>

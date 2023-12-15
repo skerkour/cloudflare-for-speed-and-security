@@ -10,7 +10,7 @@ import { Base } from "./_base";
 export async function page(ctx: Context): Promise<Response> {
   const reqUrl = new URL(ctx.req.url);
 
-  const domain = 'blog.cloudflarebook.net';
+  const domain = 'blog.cloudflarebook.com';
   const [blog, page] = await Promise.all([
     getBlog(ctx, domain),
     getPage(ctx, domain, reqUrl.pathname),

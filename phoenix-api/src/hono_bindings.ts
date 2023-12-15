@@ -5,6 +5,7 @@ export type Bindings = {
   JWT_SECRET: string;
   BLOGS_ROOT_DOMAIN: string;
   DB: D1Database;
+  R2_BUCKET: R2Bucket;
 };
 
 export type Variables = {

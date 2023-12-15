@@ -10,7 +10,7 @@ import { HtmlEscapedString } from "hono/utils/html";
 
 export async function index(ctx: Context): Promise<Response> {
   // const reqUrl = new URL(ctx.req.url);
-  const domain = 'blog.cloudflarebook.net';
+  const domain = 'blog.cloudflarebook.com';
   const [blog, posts] = await Promise.all([
     getBlog(ctx, domain),
     getPosts(ctx, domain),

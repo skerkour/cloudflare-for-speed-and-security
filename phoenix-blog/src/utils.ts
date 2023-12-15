@@ -1,7 +1,6 @@
 import { ApiError, ApiResponse } from "@phoenix/core/api";
 import { Blog, BlogValidator, Page, PageValidator } from "@phoenix/core/entities";
 import { InternalServerError, NotFoundError } from "@phoenix/core/errors";
-import { sha256Sum } from "@phoenix/core/crypto";
 import { Context } from "./context";
 
 export async function getBlog(ctx: Context, domain: string): Promise<Blog> {

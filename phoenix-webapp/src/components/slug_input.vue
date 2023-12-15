@@ -33,7 +33,7 @@ const $emit = defineEmits(['update:modelValue', 'keyup'])
 // lifecycle
 
 // variables
-const rootDomain = 'cloudflarebook.net';
+const rootDomain = 'cloudflarebook.com';
 
 // computed
 const slug = computed({
