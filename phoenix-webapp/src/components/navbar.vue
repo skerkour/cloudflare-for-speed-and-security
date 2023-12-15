@@ -90,6 +90,7 @@ import CfLink from './cf_link.vue';
 import { useStore } from '@/app/store';
 import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline';
 import { Dialog, DialogPanel } from '@headlessui/vue';
+import navigation from '@/app/navigation';
 
 const $store = useStore();
 
@@ -105,13 +106,6 @@ const showLogoutButton = computed(() => {
 })
 
 
-const navigation = [
-  { name: 'Buy the Book', url: 'https://kerkour.com/cloudflare-for-speed-and-security' },
-  { name: 'About the Author', url: 'https://kerkour.com' },
-  { name: 'Blog', url: 'https://kerkour.com/blog' },
-  { name: 'Demo (Phoenix)', url: 'https://blog.cloudflarebook.com' },
-  { name: 'GitHub', url: 'https://github.com/skerkour/cloudflare-for-speed-and-security' },
-];
 const isMobileMenuOpen = ref(false);
 
 </script>
