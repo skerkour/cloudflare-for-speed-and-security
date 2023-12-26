@@ -68,7 +68,7 @@ COPY --from=builder_files \
     /etc/group \
     /etc/mime.types \
     /etc/timezone \
-    /etc
+    /etc/
 COPY --from=builder_files /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 
 COPY --from=builder_go /origin/dist/origin /usr/local/bin/origin
