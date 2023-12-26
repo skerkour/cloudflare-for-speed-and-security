@@ -39,7 +39,9 @@ jobs:
     permissions:
       contents: read
       packages: write
-    working-directory: ./origin
+    defaults:
+      run:
+        working-directory: ./origin
     steps:
       - uses: actions/checkout@v3
 
