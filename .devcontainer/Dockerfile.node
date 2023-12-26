@@ -1,3 +1,5 @@
+FROM golang:1.21-alpine AS go
+
 FROM debian:bookworm
 
 ENV TZ="Europe/London"
@@ -38,5 +40,15 @@ USER $USERNAME
 
 COPY --chown=$USERNAME bashrc /home/$USERNAME/.bashrc
 COPY --chown=$USERNAME vimrc /home/$USERNAME/.vimrc
+
+# Setup go
+RUN mkdir -p /home/$USERNAME/.local/gopath
+COPY --from=go /usr/local/go /home/$USERNAME/.local/go
+
+ENV GOROOT /home/$USERNAME/.local/go
+ENV GOPATH /home/$USERNAME/.local/gopath
+ENV PATH $PATH:$GOPATH/bin:$GOROOT/bin
+
+RUN go install github.com/bloom42/stdx/tools/watchgod@latest
 
 WORKDIR /

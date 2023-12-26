@@ -1,4 +1,4 @@
-name: deploy
+name: ci
 
 # You need to setup the following secrets:
 # CLOUDFLARE_ACCOUNT_ID: Your Cloudflare account ID
@@ -32,3 +32,26 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: |
           make deploy
+
+  origin:
+    runs-on: ubuntu-latest
+    # important to be able to push to ghcr.io
+    permissions:
+      contents: read
+      packages: write
+    working-directory: ./origin
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build Docker images
+        run: |
+          make docker_build
+
+        # secrets.GITHUB_TOKEN is automatically injected
+      - name: Login to container registry
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
+
+      - name: Push Docker images
+        run: |
+          make docker_push
