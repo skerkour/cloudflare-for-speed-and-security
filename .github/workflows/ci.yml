@@ -14,7 +14,7 @@ on:
 
 jobs:
 
-  cloudflarebook.com:
+  cloudflarebook-dot-com:
     runs-on: ubuntu-latest
     defaults:
       run:
