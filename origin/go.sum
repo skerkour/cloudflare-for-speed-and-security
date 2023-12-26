@@ -1,3 +1,5 @@
+github.com/bloom42/stdx v0.0.0-20231226155351-fa0ff3a7e645 h1:1QfapnvgM6/P3MPKQftTncM6vz6TN6H3xNSR3C/r9RU=
+github.com/bloom42/stdx v0.0.0-20231226155351-fa0ff3a7e645/go.mod h1:EZT4MIjPfxv03r8l4AWIuoaUqJarn3x6B1JxF3rkDGA=
 github.com/go-chi/chi/v5 v5.0.11 h1:BnpYbFZ3T3S1WMpD79r7R5ThWX40TaFB7L31Y8xqSwA=
 github.com/go-chi/chi/v5 v5.0.11/go.mod h1:DslCQbL2OYiznFReuXYUmQ2hGd1aDpCnlMNITLSKoi8=
 golang.org/x/crypto v0.17.0 h1:r8bRNjWL3GshPW3gkd+RpvzWrZAwPS49OmTGZ/uhM4k=

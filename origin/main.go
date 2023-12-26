@@ -17,6 +17,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/bloom42/stdx/httpx"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"golang.org/x/crypto/acme/autocert"
@@ -70,7 +71,11 @@ func main() {
 			slog.String("https_lets_encrypt_email", config.httpsLetsEncryptEmail),
 		))
 
-	router := loadRouter()
+	router, err := loadRouter()
+	if err != nil {
+		logger.Error(err.Error())
+		os.Exit(1)
+	}
 
 	var gracefulShutdownWaitGroup sync.WaitGroup
 	var httpServer *http.Server
@@ -192,7 +197,7 @@ func loadConfig() (config Config, err error) {
 	return
 }
 
-func loadRouter() (router chi.Router) {
+func loadRouter() (router chi.Router, err error) {
 	router = chi.NewRouter()
 
 	router.Use(middleware.Recoverer)
@@ -202,12 +207,13 @@ func loadRouter() (router chi.Router) {
 	router.Use(middleware.CleanPath)
 
 	router.Get("/", IndexHandler)
-	router.Get("/100k.bin", BinHandler)
-	router.Get("/100k.css", CssHandler)
-	router.Get("/100k.jpg", JpgHandler)
-	router.Get("/100k.js", JsHandler)
 
-	router.NotFound(NotFoundHandler)
+	webappHandler, err := httpx.WebappHandler(assetsFS, "404.html", http.StatusNotFound)
+	if err != nil {
+		return
+	}
+
+	router.NotFound(webappHandler)
 
 	return
 }
@@ -220,78 +226,8 @@ func IndexHandler(w http.ResponseWriter, req *http.Request) {
 
 	w.Header().Add("Content-Type", "text/html; charset=utf-8")
 	w.Header().Add("Content-Length", strconv.Itoa(int(fileInfo.Size())))
-	w.Header().Add("Cache-Control", "public, no-cache, must-revalidate")
-
-	w.WriteHeader(http.StatusOK)
-	io.Copy(w, file)
-}
-
-func BinHandler(w http.ResponseWriter, req *http.Request) {
-	file, _ := assetsFS.Open("100k.bin")
-	defer file.Close()
-
-	fileInfo, _ := file.Stat()
-
-	w.Header().Add("Content-Type", "application/octet-stream")
-	w.Header().Add("Content-Length", strconv.Itoa(int(fileInfo.Size())))
-	w.Header().Add("Cache-Control", "public, max-age=31536000, immutable")
-
-	w.WriteHeader(http.StatusOK)
-	io.Copy(w, file)
-}
-
-func CssHandler(w http.ResponseWriter, req *http.Request) {
-	file, _ := assetsFS.Open("100k.css")
-	defer file.Close()
-
-	fileInfo, _ := file.Stat()
-
-	w.Header().Add("Content-Type", "text/css")
-	w.Header().Add("Content-Length", strconv.Itoa(int(fileInfo.Size())))
-	w.Header().Add("Cache-Control", "public, max-age=31536000, immutable")
-
-	w.WriteHeader(http.StatusOK)
-	io.Copy(w, file)
-}
-
-func JpgHandler(w http.ResponseWriter, req *http.Request) {
-	file, _ := assetsFS.Open("100k.jpg")
-	defer file.Close()
-
-	fileInfo, _ := file.Stat()
-
-	w.Header().Add("Content-Type", "image/jpeg")
-	w.Header().Add("Content-Length", strconv.Itoa(int(fileInfo.Size())))
-	w.Header().Add("Cache-Control", "public, max-age=31536000, immutable")
-
-	w.WriteHeader(http.StatusOK)
-	io.Copy(w, file)
-}
-
-func JsHandler(w http.ResponseWriter, req *http.Request) {
-	file, _ := assetsFS.Open("100k.js")
-	defer file.Close()
-
-	fileInfo, _ := file.Stat()
-
-	w.Header().Add("Content-Type", "application/javascript")
-	w.Header().Add("Content-Length", strconv.Itoa(int(fileInfo.Size())))
-	w.Header().Add("Cache-Control", "public, max-age=31536000, immutable")
-
-	w.WriteHeader(http.StatusOK)
-	io.Copy(w, file)
-}
-
-func NotFoundHandler(w http.ResponseWriter, req *http.Request) {
-	file, _ := assetsFS.Open("404.html")
-	defer file.Close()
-
-	fileInfo, _ := file.Stat()
-
-	w.Header().Add("Content-Type", "text/html; charset=utf-8")
-	w.Header().Add("Content-Length", strconv.Itoa(int(fileInfo.Size())))
 	w.Header().Add("Cache-Control", "private, no-cache, no-store, must-revalidate")
 
-	w.WriteHeader(http.StatusNotFound)
+	w.WriteHeader(http.StatusOK)
 	io.Copy(w, file)
 }
