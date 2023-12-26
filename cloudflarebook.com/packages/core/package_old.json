@@ -1,0 +1,17 @@
+{
+    "name": "@cloudflarebook.com/core",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "scripts": {
+      "clean": "rm -rf dist",
+      "build": "npm run clean && tsc",
+      "dev": "tsc --watch"
+    },
+    "exports": {
+      "./*": {
+        "types": "./dist/*.d.ts",
+        "import": "./dist/*.js"
+      }
+    }
+  }

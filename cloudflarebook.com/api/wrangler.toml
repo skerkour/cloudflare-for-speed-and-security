@@ -1,0 +1,23 @@
+name = "cloudflarebook-api"
+main = "src/app.ts"
+compatibility_date = "2023-09-18"
+
+
+vars = []
+
+r2_buckets = [
+  { binding = "r2", bucket_name = "cloudflarebook-dev" }
+]
+
+d1_databases = [
+  { binding = "DB", database_name = "cloudflarebook", database_id = "2a9779e5-3223-4640-9fe4-6992a08a142c" }
+]
+
+[placement]
+mode = "smart"
+
+[env.production]
+
+r2_buckets = [
+  { binding = "r2", bucket_name = "cloudflarebook" }
+]

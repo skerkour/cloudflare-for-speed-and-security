@@ -1,0 +1,22 @@
+name = "cloudflarebook-blog"
+main = "src/index.ts"
+compatibility_date = "2023-09-18"
+
+services = [
+  { binding = "api", service = "cloudflarebook-api" }
+]
+
+[site]
+bucket = "./public"
+
+# See https://developers.cloudflare.com/workers/wrangler/bundling/
+# and https://developers.cloudflare.com/workers/wrangler/configuration/#bundling
+rules = [
+  { type = "Text", globs = ["**/*.css"], fallthrough = true },
+  { type = "Data", globs = ["**/*.ico"], fallthrough = true },
+]
+
+
+[[r2_buckets]]
+binding = "storage"
+bucket_name = "cloudflarebook"

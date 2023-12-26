@@ -1,0 +1,28 @@
+{
+  "name": "cloudflarebook.com",
+  "author": "https://kerkour.com",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Serverless blogging engine",
+  "workspaces": [
+    "api",
+    "blog",
+    "webapp",
+    "packages/*"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/skerkour/cloudflare-for-speed-and-security.git"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20231016.0",
+    "typescript": "^5.2.2",
+    "wrangler": "^3.14.0"
+  },
+  "dependencies": {
+    "@cloudflarebook.com/core": "file:./packages/core",
+    "@cloudflarebook.com/jwt": "file:./packages/jwt",
+    "@cloudflarebook.com/uuidv7": "file:./packages/uuidv7",
+    "zod": "^3.22.4"
+  }
+}

@@ -14,8 +14,11 @@ on:
 
 jobs:
 
-  phoenix:
+  cloudflarebook.com:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./cloudflarebook.com
     steps:
       - uses: actions/checkout@v3
 
