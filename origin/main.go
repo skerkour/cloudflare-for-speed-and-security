@@ -21,7 +21,7 @@ import (
 	"golang.org/x/crypto/acme/autocert"
 )
 
-//go:embed assets/*
+//go:embed public/*
 var assetsFs embed.FS
 
 const (
@@ -207,7 +207,7 @@ func loadRouter() (router chi.Router) {
 }
 
 func IndexHandler(w http.ResponseWriter, req *http.Request) {
-	file, _ := assetsFs.Open("assets/index.html")
+	file, _ := assetsFs.Open("public/index.html")
 	defer file.Close()
 
 	fileInfo, _ := file.Stat()
@@ -221,7 +221,7 @@ func IndexHandler(w http.ResponseWriter, req *http.Request) {
 }
 
 func BinHandler(w http.ResponseWriter, req *http.Request) {
-	file, _ := assetsFs.Open("assets/100k.bin")
+	file, _ := assetsFs.Open("public/100k.bin")
 	defer file.Close()
 
 	fileInfo, _ := file.Stat()
@@ -235,7 +235,7 @@ func BinHandler(w http.ResponseWriter, req *http.Request) {
 }
 
 func CssHandler(w http.ResponseWriter, req *http.Request) {
-	file, _ := assetsFs.Open("assets/100k.css")
+	file, _ := assetsFs.Open("public/100k.css")
 	defer file.Close()
 
 	fileInfo, _ := file.Stat()
@@ -249,7 +249,7 @@ func CssHandler(w http.ResponseWriter, req *http.Request) {
 }
 
 func JpgHandler(w http.ResponseWriter, req *http.Request) {
-	file, _ := assetsFs.Open("assets/100k.jpg")
+	file, _ := assetsFs.Open("public/100k.jpg")
 	defer file.Close()
 
 	fileInfo, _ := file.Stat()
@@ -263,7 +263,7 @@ func JpgHandler(w http.ResponseWriter, req *http.Request) {
 }
 
 func JsHandler(w http.ResponseWriter, req *http.Request) {
-	file, _ := assetsFs.Open("assets/100k.js")
+	file, _ := assetsFs.Open("public/100k.js")
 	defer file.Close()
 
 	fileInfo, _ := file.Stat()
@@ -277,7 +277,7 @@ func JsHandler(w http.ResponseWriter, req *http.Request) {
 }
 
 func NotFoundHandler(w http.ResponseWriter, req *http.Request) {
-	file, _ := assetsFs.Open("assets/404.html")
+	file, _ := assetsFs.Open("public/404.html")
 	defer file.Close()
 
 	fileInfo, _ := file.Stat()
