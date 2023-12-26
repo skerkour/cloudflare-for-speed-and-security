@@ -9,7 +9,7 @@ This folder contains the code running at [cloudflarebook.com](https://cloudflare
 
 ## Deploy in your Cloudflare account
 
-You need 2 domains, let's say `phoenix.com` and `phoenix.blog` already setup on Cloudflare.
+You need 1 domain, let's say `exampleblog.com` already setup on Cloudflare.
 
 Make sure that you have Node.js installed (see `.devcontainer/Dockerfile` for and example of setup).
 
@@ -19,39 +19,41 @@ $ make install_ci
 $ make deploy
 ```
 
-Create a D1 database named `phoenix`: `Workers & Pages` > `D1`.
+Create a D1 database named `cloudflarebook`: `Workers & Pages` > `D1`.
 
-In your Cloudflare dashboard, go to `Workers & Pages` > `pingoo-api` > `Settings` > `Variables`.
+In your Cloudflare dashboard, go to `Workers & Pages` > `cloudflarebook-api` > `Settings` > `Variables`.
 
 Create the following Environment Variable:
 
 ```
 Variable name: JWT_SECRET
-Value: [See phoenix-api/env.example to learn how to generate a secure secret key]
+Value: [See cloudflarebook-api/env.example to learn how to generate a secure secret key]
 Encrypt: true
 ```
 
-Then go to `Workers & Pages` > `pingoo-webapp` > `Settings` > `Functions` > `Service bindings` and add:
+Then go to `Workers & Pages` > `cloudflarebook-webapp` > `Settings` > `Functions` > `Service bindings` and add:
 ```
 Variable name: api
-Service: phoenix-api
+Service: cloudflarebook-api
 ```
 
-Then in `Workers & Pages` > `pingoo-webapp` > `Custom Domains` add: `phoenix.com`
+Then in `Workers & Pages` > `cloudflarebook-webapp` > `Custom Domains` add: `example.com`
 
+Then in `Workers & Pages` > `cloudflarebook-blog` > `Custom Domains` add: `blog.example.com`
 
-Go to your Cloudflare zone for `phoenix.blog` > `Workers Routes` and add a Route:
+<!--
+Go to your Cloudflare zone for `example.com` > `Workers Routes` and add a Route:
 ```
-Route: */*
-Worker: phoenix-blog
-```
+Route: blog.example.com/*
+Worker: cloudflarebook-blog
+``` -->
 
 
 ## Development
 
 Make sure that you have Node.js installed (see `.devcontainer/Dockerfile` for and example of setup).
 
-Go to `phoenix-api`.
+Go to `cloudflarebook-api`.
 
 Create a `.dev.vars` with the same variables from `env.example`, but with valid values.
 
