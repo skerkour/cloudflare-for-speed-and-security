@@ -63,11 +63,13 @@ ENV LANG="en_US.UTF-8"
 ENV LANGUAGE="en_US:en"
 
 # Copy files and build
-COPY --from=builder_files /etc/passwd /etc/passwd
-COPY --from=builder_files /etc/group /etc/group
+COPY --from=builder_files \
+    /etc/passwd \
+    /etc/group \
+    /etc/mime.types \
+    /etc/timezone \
+    /etc
 COPY --from=builder_files /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
-COPY --from=builder_files /etc/mime.types /etc/mime.types
-COPY --from=builder_files /etc/timezone /etc/timezone
 
 COPY --from=builder_go /origin/dist/origin /usr/local/bin/origin
 
