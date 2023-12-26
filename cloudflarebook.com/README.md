@@ -9,7 +9,29 @@ This folder contains the code running at [cloudflarebook.com](https://cloudflare
 
 ## Deploy in your Cloudflare account
 
-You need 1 domain, let's say `exampleblog.com` already setup on Cloudflare.
+You need 1 domain, let's say `example.com` already setup on Cloudflare.
+
+
+Create D1 database
+- add schema.sql
+
+Create Pages applications (from browser)
+
+
+```bash
+$ make install_ci
+$ make deploy
+```
+
+- add env to api
+    - JWT SECRET
+
+
+- connect api to webapp
+- add custom domain to webapp
+
+- add workers route to blog
+
 
 Make sure that you have Node.js installed (see `.devcontainer/Dockerfile` for and example of setup).
 
