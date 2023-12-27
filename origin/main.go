@@ -208,7 +208,12 @@ func loadRouter() (router chi.Router, err error) {
 
 	router.Get("/", IndexHandler)
 
-	webappHandler, err := httpx.WebappHandler(assetsFS, "404.html", http.StatusNotFound)
+	webappHandlerConfig := httpx.WebappHandlerConfig{
+		FileNotFound:             "404.html",
+		StatusNotFound:           http.StatusNotFound,
+		ImmutableFilesExtensions: []string{".js", ".css", ".jpg"},
+	}
+	webappHandler, err := httpx.WebappHandler(assetsFS, &webappHandlerConfig)
 	if err != nil {
 		return
 	}
