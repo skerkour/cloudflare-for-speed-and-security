@@ -20,7 +20,7 @@ Almost unnoticed a few years ago, Cloudflare is now the fastest growing cloud pl
 Their secret sauce is that hey care about developer experience and their products are secure by design. No more bucket with sensitive data publicly left exposed. No more database left wide open. No more ultra-complex security policies that lead to mistakes and leaks. No more dashboard more complex than a nuclear plant. No more surprise bill because someone targeted a `while true; do curl ...` at your servers and made your bandwidth balloon.
 
 
-But, Cloudflare is not magic, you will need to learn new design patterns and have a deep understanding of protocols to get the most out of the global coud platform.
+But, Cloudflare is not magic, you will need to learn new design patterns and have a deep understanding of protocols to get the most out of the global cloud platform.
 
 
 From theory to practice, you will learn how low-level network and security protocols work. How to configure Cloudflare to secure and scale your web applications. How to create serverless applications and which database to chose with serverless functions. How to optimize your caching policies. How to distribute videos globally. And a lot of other things, all of that while significantly reducing your cloud bill.
